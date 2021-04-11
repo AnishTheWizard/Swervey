@@ -8,7 +8,6 @@
 package frc.robot.libs.Swerve;
 
 import frc.robot.libs.Wrappers.*;
-import edu.wpi.first.wpilibj.controller.PIDController;
 
 /**
  * Add your docs here.

@@ -26,6 +26,10 @@ import frc.robot.libs.Wrappers.GenericMotor;
  * How to fix the atan2's jump in
  * How to fix the encoder jump from 4095 -> 0
  * How to implement module offsets
+ * 
+ * Organizing PROBLEM
+ * If certain modules have different encoder values, then its better to do math in the module class itself
+ * 
  */
 
 

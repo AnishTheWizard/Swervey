@@ -19,10 +19,6 @@ import edu.wpi.first.wpilibj.AnalogInput;
 public class GenericEncoder {
     private AnalogInput analogEncoder;
     private CANCoder canCoder;
-    private CANCoderConfiguration config;
-
-    private final int ticksPerRotation = 4095;
-    private final int degPerRotation = 360;
 
     //a = analog, c = cancoder
     private String encoderType;
