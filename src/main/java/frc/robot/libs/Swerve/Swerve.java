@@ -18,6 +18,20 @@ import frc.robot.libs.Wrappers.GenericMotor;
 /**
  * Add your docs here.
  */
+
+/**
+ * TODO PROBLEMS
+ * How would rotation with right joy work
+ * How would field centric mode work
+ * How to fix the atan2's jump in
+ * How to fix the encoder jump from 4095 -> 0
+ * How to implement module offsets
+ */
+
+
+ /**
+  * This class connects the 4 modules as well as computes the outer maths to come to certain motor outputs
+  */
 public class Swerve {
     SwerveModule module = new SwerveModule(new GenericMotor(new TalonFX(0)), new GenericMotor(new VictorSPX(0)), new GenericEncoder(new AnalogInput(0))); //test module
     PIDController sController = new PIDController(0, 0, 0);

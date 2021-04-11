@@ -14,6 +14,10 @@ import edu.wpi.first.wpilibj.controller.PIDController;
  * Add your docs here.
  * @author Anish Chandra
  */
+
+ /**
+  * This class is in charge of connecting the individual components of a swerve module together, as well as some encoder accessors
+  */
 public class SwerveModule {
     private GenericMotor drive;
     private GenericMotor steer;

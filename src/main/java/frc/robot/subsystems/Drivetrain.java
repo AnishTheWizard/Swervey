@@ -8,12 +8,28 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.libs.Swerve.Swerve;
+
+/**
+ * This class is in charge of linking the swerve class to the joysticks, as well as configure various components
+ * High to Low ->
+ * 1) Drivetrain
+ * 2) Swerve
+ * 3) SwerveModule
+ * 4) Generic Motor and Encoder
+ */
 
 public class Drivetrain extends SubsystemBase {
   /**
    * Creates a new Drivetrain.
    */
+
+  private static Drivetrain dt = new Drivetrain();
+
+  public static Drivetrain getInstance() {//time to learn singleton classes
+    return dt;
+  }
 
   private Swerve swerve;
   public Drivetrain() {
@@ -23,6 +39,9 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double x = 
+    double x = RobotContainer.getInstance().getLeftX();
+    double y = RobotContainer.getInstance().getLeftY();
+    double rotate = Math.atan2(y, x);
+    swerve.control(x, y, rotate);
   }
 }

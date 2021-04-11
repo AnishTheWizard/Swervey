@@ -28,6 +28,16 @@ public class RobotContainer {
 
   private final Joystick driver = new Joystick(0);
 
+  private static RobotContainer rc = null;
+  
+
+
+  public static RobotContainer getInstance() {
+    if(rc == null)
+      rc = new RobotContainer();
+    return rc;
+  }
+
 
 
   /**
@@ -56,5 +66,21 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
+  }
+
+  public double getLeftX() {
+    return driver.getX();
+  }
+
+  public double getLeftY() {
+    return driver.getY();
+  }
+
+  public double getRightX() {
+    return driver.getRawAxis(4);
+  }
+
+  public double getAxis(int id) {
+    return driver.getRawAxis(id);
   }
 }
