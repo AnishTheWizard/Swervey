@@ -25,23 +25,28 @@ public class Drivetrain extends SubsystemBase {
    * Creates a new Drivetrain.
    */
 
-  private static Drivetrain dt = new Drivetrain();
+  private static Drivetrain dt = null;
 
   public static Drivetrain getInstance() {//time to learn singleton classes
+    if(dt == null)
+      dt = new Drivetrain();
     return dt;
   }
 
   private Swerve swerve;
+
   public Drivetrain() {
     swerve = new Swerve();
   }
 
+
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     double x = RobotContainer.getInstance().getLeftX();
     double y = RobotContainer.getInstance().getLeftY();
-    double rotate = Math.atan2(y, x);
+    double rotate = RobotContainer.getInstance().getRightX();
     swerve.control(x, y, rotate);
   }
 }
