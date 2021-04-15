@@ -18,15 +18,16 @@ public class Gyro {
 
     public Gyro(int port) {
         gyro = new PigeonIMU(port);
+        zeroRobotRotation();
     }
 
     public double getRobotRotation() {
         double[] ypr = new double[3];
         gyro.getYawPitchRoll(ypr);
-        return ypr[0];
+        return Math.toRadians(ypr[0]);
     }
 
     public void zeroRobotRotation() {
-        gyro.setYaw(getRobotRotation());
+        gyro.setYaw(0);
     }
 }

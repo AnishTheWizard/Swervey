@@ -9,7 +9,6 @@ package frc.robot.libs.Swerve;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -40,8 +39,7 @@ import frc.robot.libs.Wrappers.Gyro;
   * This class connects the 4 modules as well as computes the outer maths to come to certain motor outputs
   */
 public class Swerve {
-    SwerveModule module = new SwerveModule(new GenericMotor(new TalonFX(0)), new GenericMotor(new VictorSPX(0)), new GenericEncoder(new AnalogInput(0)), new PIDController(0, 0, 0)); //test module (pose = front right)
-    PIDController sController = new PIDController(0, 0, 0);
+    private SwerveModule module = new SwerveModule(new GenericMotor(new TalonFX(0)), new GenericMotor(new VictorSPX(0)), new GenericEncoder(new AnalogInput(0)), new PIDController(0, 0, 0)); //test module (pose = front right)
 
     private final double rotationAngle = Math.atan2((Constants.WIDTH/2), (Constants.LENGTH/2)) + Math.PI/2;
 
@@ -64,6 +62,8 @@ public class Swerve {
 
         double mag = Math.hypot(targetVectorX, targetVectorY);
         double theta = Math.atan2(targetVectorY, targetVectorX); //TODO should the wheel spin more than 90 to get to a target?
+
+        theta -= gyro.getRobotRotation();
 
         module.set(mag, theta);
     }
