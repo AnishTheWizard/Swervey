@@ -16,5 +16,9 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int[] module_offsets = {0, 0, 0, 0};
+    public static final int[] MODULE_OFFSETS = {0, 0, 0, 0};
+    
+    public static final double WIDTH = 23.5;
+    public static final double LENGTH = 21.5;
+
 }
