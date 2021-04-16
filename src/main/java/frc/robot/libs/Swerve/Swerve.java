@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.Constants;
+import frc.robot.RobotMap;
 import frc.robot.libs.Wrappers.GenericEncoder;
 import frc.robot.libs.Wrappers.GenericMotor;
 import frc.robot.libs.Wrappers.Gyro;
@@ -23,8 +24,8 @@ import frc.robot.libs.Wrappers.Gyro;
 
 /**
  * TODO PROBLEMS
- * How would rotation with right joy work
- * How would field centric mode work
+ * How would rotation with right joy work - uwu
+ * How would field centric mode work - uwu
  * How to fix the atan2's jump in
  * How to fix the encoder jump from 4095 -> 0
  * How to implement module offsets
@@ -39,32 +40,56 @@ import frc.robot.libs.Wrappers.Gyro;
   * This class connects the 4 modules as well as computes the outer maths to come to certain motor outputs
   */
 public class Swerve {
-    private SwerveModule module = new SwerveModule(new GenericMotor(new TalonFX(0)), new GenericMotor(new VictorSPX(0)), new GenericEncoder(new AnalogInput(0)), new PIDController(0, 0, 0)); //test module (pose = front right)
+    private SwerveModule[] modules = new SwerveModule[Constants.NUMBER_OF_MODULES];
 
-    private final double rotationAngle = Math.atan2((Constants.WIDTH/2), (Constants.LENGTH/2)) + Math.PI/2;
+    private final double ROTATION_ANGLE;
 
-    private Gyro gyro = new Gyro(0);
+    private Gyro gyro;
 
-    public Swerve() {}
+    public Swerve() {
+
+        for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
+            GenericMotor drive = new GenericMotor(new TalonFX(RobotMap.MODULES_DRIVE[i]));
+            GenericMotor steer = new GenericMotor(new VictorSPX(RobotMap.MODULES_STEER[i]));
+            GenericEncoder steercoder = new GenericEncoder(new AnalogInput(RobotMap.ENCODERS_STEER[i]));
+
+            PIDController controller = new PIDController(Constants.dtGains[0], Constants.dtGains[1], Constants.dtGains[2]);
+
+            modules[i] = new SwerveModule(drive, steer, steercoder, controller);
+        }
+
+        gyro = new Gyro(RobotMap.GYRO);
+        ROTATION_ANGLE = Math.atan2((Constants.WIDTH/2), (Constants.LENGTH/2));
+    }
 
     public void control(double x, double y, double rotateMag) {
         // given x, y : find driveSpeed, rotateSpeed
 
-        if(rotateMag < 0.05 || rotateMag > -0.05) {//rotation deadband
+        if(rotateMag < 0.05 || rotateMag > -0.05) {//rotation deadband TODO could move to DT
             rotateMag = 0;
         }
 
-        double rotationX = rotateMag * Math.cos(rotationAngle);
-        double rotationY = rotateMag * Math.sin(rotationAngle);
+        for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
+            double rotationAngle = ROTATION_ANGLE;
+            double rotationX, rotationY;
 
-        double targetVectorX = x + rotationX;
-        double targetVectorY = y + rotationY;
+            if(i % 2 == 0) { //if module number is even TODO verify this
+                rotationAngle += Math.PI;
+                rotationAngle += Math.PI;
+            }
 
-        double mag = Math.hypot(targetVectorX, targetVectorY);
-        double theta = Math.atan2(targetVectorY, targetVectorX); //TODO should the wheel spin more than 90 to get to a target?
+            rotationX = rotateMag * Math.cos(rotationAngle);
+            rotationY = rotateMag * Math.sin(rotationAngle); //TODO verify that this applies in all directions of rotation
 
-        theta -= gyro.getRobotRotation();
+            double targetVectorX = x + rotationX;
+            double targetVectorY = y + rotationY;
 
-        module.set(mag, theta);
+            double mag = Math.hypot(targetVectorX, targetVectorY);
+            double theta = Math.atan2(targetVectorY, targetVectorX); //TODO should the wheel spin more than 90 to get to a target?
+
+            theta -= gyro.getRobotRotation();
+
+            modules[i].set(mag, theta);
+        }
     }
 }

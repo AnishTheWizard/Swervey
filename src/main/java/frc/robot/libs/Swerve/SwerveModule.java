@@ -28,7 +28,7 @@ public class SwerveModule {
         this.drive = drive;
         this.steer = steer;
         this.steercoder = steercoder;
-        steerController = controller;
+        this.steerController = controller; //by storing the controller within the 
     }
 
     public void set(double translate, double theta) {
