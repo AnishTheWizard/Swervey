@@ -2,7 +2,7 @@ package frc.robot.libs.Utility;
 
 public class MathUtility {
     public static double[] normalize(double[] ds) {
-        double maxVal = ds[0];
+        double maxVal = 1;
         for(double d : ds) {
             if(d > maxVal) {
                 maxVal = d;

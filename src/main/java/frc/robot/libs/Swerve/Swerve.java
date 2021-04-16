@@ -14,12 +14,15 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
+import frc.robot.libs.Utility.MathUtility;
 import frc.robot.libs.Wrappers.GenericEncoder;
 import frc.robot.libs.Wrappers.GenericMotor;
 import frc.robot.libs.Wrappers.Gyro;
 
 /**
  * Add your docs here.
+ * @author Anish Chandra
+ * @
  */
 
 /**
@@ -29,6 +32,8 @@ import frc.robot.libs.Wrappers.Gyro;
  * How to fix the atan2's jump in
  * How to fix the encoder jump from 4095 -> 0
  * How to implement module offsets
+ * How should the wheel move when theta > 90
+ * 
  * 
  * Organizing PROBLEM
  * If certain modules have different encoder values, then its better to do math in the module class itself
@@ -42,9 +47,16 @@ import frc.robot.libs.Wrappers.Gyro;
 public class Swerve {
     private SwerveModule[] modules = new SwerveModule[Constants.NUMBER_OF_MODULES];
 
+    private Gyro gyro;
+
+    private PIDController steerController;
+
     private final double ROTATION_ANGLE;
 
-    private Gyro gyro;
+    private double[] speeds;
+    private double[] thetas;
+
+    
 
     public Swerve() {
 
@@ -53,12 +65,11 @@ public class Swerve {
             GenericMotor steer = new GenericMotor(new VictorSPX(RobotMap.MODULES_STEER[i]));
             GenericEncoder steercoder = new GenericEncoder(new AnalogInput(RobotMap.ENCODERS_STEER[i]));
 
-            PIDController controller = new PIDController(Constants.dtGains[0], Constants.dtGains[1], Constants.dtGains[2]);
-
-            modules[i] = new SwerveModule(drive, steer, steercoder, controller);
+            modules[i] = new SwerveModule(drive, steer, steercoder);
         }
 
         gyro = new Gyro(RobotMap.GYRO);
+        steerController = new PIDController(Constants.dtGains[0], Constants.dtGains[1], Constants.dtGains[2]);
         ROTATION_ANGLE = Math.atan2((Constants.WIDTH/2), (Constants.LENGTH/2));
     }
 
@@ -89,7 +100,18 @@ public class Swerve {
 
             theta -= gyro.getRobotRotation();
 
-            modules[i].set(mag, theta);
+            speeds[i] = mag;
+            thetas[i] = theta;
         }
+
+        speeds = MathUtility.normalize(speeds);
+        thetas = MathUtility.normalize(thetas);
+
+        for(int i = 0; i < speeds.length; i++) {
+            double rotate = steerController.calculate(modules[i].getRotation(), thetas[i]);
+            modules[i].set(speeds[i], rotate);
+        }
+
+
     }
 }
