@@ -47,6 +47,6 @@ public class Drivetrain extends SubsystemBase {
     double x = RobotContainer.getInstance().getLeftX();
     double y = RobotContainer.getInstance().getLeftY();
     double rotate = RobotContainer.getInstance().getRightX();
-    swerve.control(x, y, rotate);
+    swerve.control(-x, y, rotate); //right x is negative
   }
 }

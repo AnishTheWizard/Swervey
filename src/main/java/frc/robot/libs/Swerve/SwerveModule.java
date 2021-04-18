@@ -7,7 +7,6 @@
 
 package frc.robot.libs.Swerve;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.libs.Wrappers.*;
 
 /**
@@ -22,19 +21,16 @@ public class SwerveModule {
     private GenericMotor drive;
     private GenericMotor steer;
     private GenericEncoder steercoder;
-    private PIDController steerController;
 
-    public SwerveModule(GenericMotor drive, GenericMotor steer, GenericEncoder steercoder, PIDController controller) {
+    public SwerveModule(GenericMotor drive, GenericMotor steer, GenericEncoder steercoder) {
         this.drive = drive;
         this.steer = steer;
         this.steercoder = steercoder;
-        steerController = controller;
     }
 
-    public void set(double translate, double theta) {
+    public void set(double translate, double rotateMag) {
         drive.set(translate);
-        double rotate = steerController.calculate(getRotation(), theta);
-        steer.set(rotate);
+        steer.set(rotateMag);
     }
 
     public int getRotation() {
