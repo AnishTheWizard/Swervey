@@ -51,7 +51,6 @@ public class Swerve {
 
     private PIDController steerController;
 
-    private final double ROTATION_ANGLE;
 
     private double[] speeds;
     private double[] thetas;
@@ -72,8 +71,8 @@ public class Swerve {
 
         gyro = new Gyro(RobotMap.GYRO);
         steerController = new PIDController(Constants.dtGains[0], Constants.dtGains[1], Constants.dtGains[2]);
-        ROTATION_ANGLE = Math.atan2((Constants.WIDTH/2), (Constants.LENGTH/2));
-        ROTATION_ANGLES = new double[]{ROTATION_ANGLE + Math.PI, Math.PI + ROTATION_ANGLE, ROTATION_ANGLE+Math.PI+Math.PI/2, ROTATION_ANGLE};
+        double ROTATION_ANGLE = Math.atan2((Constants.WIDTH/2), (Constants.LENGTH/2));
+        ROTATION_ANGLES = new double[]{ROTATION_ANGLE + Math.PI, Math.PI + ROTATION_ANGLE, ROTATION_ANGLE+Math.PI/2 + Math.PI, ROTATION_ANGLE};
     }
 
     public void control(double x, double y, double rotateMag) {
@@ -87,7 +86,7 @@ public class Swerve {
             double rotationX, rotationY;
 
             rotationX = rotateMag * Math.cos(ROTATION_ANGLES[i]);
-            rotationY = rotateMag * Math.sin(ROTATION_ANGLES[i]); //TODO verify that this applies in all directions of rotation
+            rotationY = rotateMag * Math.sin(ROTATION_ANGLES[i]);
 
             double targetVectorX = x + rotationX;
             double targetVectorY = y + rotationY;
