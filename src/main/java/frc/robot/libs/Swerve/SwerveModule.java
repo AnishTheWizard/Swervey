@@ -36,4 +36,10 @@ public class SwerveModule {
     public int getRotation() {
         return steercoder.getAbsolutePosition();
     }
+
+    public double getOffset(double target) {
+        int targetTicks = steercoder.toTicks(target);
+        int err = steercoder.getError(targetTicks);
+        return steercoder.toRadians(err);
+    }
 }

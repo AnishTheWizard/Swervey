@@ -10,6 +10,7 @@ package frc.robot.libs.Wrappers;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import frc.robot.Constants;
 
 /**
  * Add your docs here.
@@ -34,5 +35,29 @@ public class GenericEncoder {
 
     public int getAbsolutePosition() {// [0, 4095]
         return encoderType == "a" ? analogEncoder.getValue() : (int)(canCoder.getAbsolutePosition()/360) * 4095;
+    }
+
+    public int getError(int target) {
+        int currentPose = getAbsolutePosition();
+        int err = target - currentPose;
+
+        if(Math.abs(err) > 2048) {//if the jump is unusually big
+            if(err < 0) {
+                target+=Constants.TICKS_PER_ROTATION;
+            }
+            else if(err > 0){
+                currentPose += Constants.TICKS_PER_ROTATION;
+            }
+            err = target - currentPose;
+        }
+        return err;
+    }
+
+    public int toTicks(double radians) {
+        return (int)((radians * Constants.TICKS_PER_ROTATION)/(Math.PI*2));
+    }
+
+    public double toRadians(int ticks) {
+        return (ticks * Math.PI * 2)/Constants.TICKS_PER_ROTATION;
     }
 }

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
-import frc.robot.libs.Utility.MathUtility;
+import frc.robot.libs.Utils.MathUtility;
 import frc.robot.libs.Wrappers.GenericEncoder;
 import frc.robot.libs.Wrappers.GenericMotor;
 import frc.robot.libs.Wrappers.Gyro;
@@ -70,7 +70,9 @@ public class Swerve {
         }
 
         gyro = new Gyro(RobotMap.GYRO);
+
         steerController = new PIDController(Constants.dtGains[0], Constants.dtGains[1], Constants.dtGains[2]);
+        
         double ROTATION_ANGLE = Math.atan2((Constants.WIDTH/2), (Constants.LENGTH/2));
         ROTATION_ANGLES = new double[]{ROTATION_ANGLE + Math.PI, Math.PI + ROTATION_ANGLE, ROTATION_ANGLE+Math.PI/2 + Math.PI, ROTATION_ANGLE};
     }
@@ -94,7 +96,7 @@ public class Swerve {
             double mag = Math.hypot(targetVectorX, targetVectorY);
             double theta = Math.atan2(targetVectorY, targetVectorX); //TODO should the wheel spin more than 90 to get to a target?
 
-            theta -= gyro.getRobotRotation();
+            theta -= gyro.getRobotRotation(); // field centric
 
             speeds[i] = mag;
             thetas[i] = theta;
@@ -104,7 +106,7 @@ public class Swerve {
         thetas = MathUtility.normalize(thetas);
 
         for(int i = 0; i < speeds.length; i++) {
-            double rotate = steerController.calculate(modules[i].getRotation(), thetas[i]);
+            double rotate = steerController.calculate(modules[i].getOffset(thetas[i]));
             modules[i].set(speeds[i], rotate);
         }
 

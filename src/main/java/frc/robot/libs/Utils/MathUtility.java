@@ -1,4 +1,4 @@
-package frc.robot.libs.Utility;
+package frc.robot.libs.Utils;
 
 public class MathUtility {
     public static double[] normalize(double[] ds) {
