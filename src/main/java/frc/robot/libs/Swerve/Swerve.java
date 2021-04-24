@@ -21,16 +21,15 @@ import frc.robot.libs.Wrappers.Gyro;
 
 /**
  * Add your docs here.
- * @author Anish Chandra
- * @
+ * @author AnishTheWizard
  */
 
 /**
  * TODO PROBLEMS
  * How would rotation with right joy work - uwu
  * How would field centric mode work - uwu
- * How to fix the atan2's jump in
- * How to fix the encoder jump from 4095 -> 0
+ * How to fix the atan2's jump in - uwu
+ * How to fix the encoder jump from 4095 -> 0 - uwu
  * How to implement module offsets
  * How should the wheel move when theta > 90
  * 

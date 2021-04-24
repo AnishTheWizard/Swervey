@@ -41,7 +41,7 @@ public class GenericEncoder {
         int currentPose = getAbsolutePosition();
         int err = target - currentPose;
 
-        if(Math.abs(err) > 2048) {//if the jump is unusually big
+        if(Math.abs(err) > 2048) {//fix encoder jumps from 4095 -> 0, and 0 -> 4095
             if(err < 0) {
                 target+=Constants.TICKS_PER_ROTATION;
             }
@@ -54,6 +54,9 @@ public class GenericEncoder {
     }
 
     public int toTicks(double radians) {
+        if(radians < 0) {
+            radians += Math.PI * 2; //atan returns -pi -> pi, if its negative, hard to map to encoder 0 -> 4096
+        }
         return (int)((radians * Constants.TICKS_PER_ROTATION)/(Math.PI*2));
     }
 
