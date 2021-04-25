@@ -41,7 +41,7 @@ public class GenericEncoder {
         int currentPose = getAbsolutePosition();
         int err = target - currentPose;
 
-        if(Math.abs(err) > 2048) {//fix encoder jumps from 4095 -> 0, and 0 -> 4095
+        if(Math.abs(err) > Constants.OVERFLOW_THRESHOLD) {//fix encoder jumps from 4095 -> 0, and 0 -> 4095
             if(err < 0) {
                 target+=Constants.TICKS_PER_ROTATION;
             }

@@ -105,10 +105,15 @@ public class Swerve {
         thetas = MathUtility.normalize(thetas);
 
         for(int i = 0; i < speeds.length; i++) {
-            double rotate = steerController.calculate(modules[i].getOffset(thetas[i]));
+            double angleErr = modules[i].getOffset(thetas[i]);
+
+            if(angleErr > Math.PI/2) {
+                angleErr -= Math.PI;
+                speeds[i] *= -1;
+            }
+
+            double rotate = steerController.calculate(angleErr);
             modules[i].set(speeds[i], rotate);
         }
-
-
     }
 }
