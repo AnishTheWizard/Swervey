@@ -34,7 +34,7 @@ public class GenericEncoder {
     }
 
     public int getAbsolutePosition() {// [0, 4095]
-        return encoderType == "a" ? analogEncoder.getValue() : (int)(canCoder.getAbsolutePosition()/360) * 4095;
+        return encoderType.equals("a") ? analogEncoder.getValue() : (int)(canCoder.getAbsolutePosition()/360) * 4095;
     }
 
     public int getError(int target) {

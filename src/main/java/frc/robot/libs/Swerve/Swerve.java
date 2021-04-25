@@ -31,8 +31,9 @@ import frc.robot.libs.Wrappers.Gyro;
  * How to fix the atan2's jump in - uwu
  * How to fix the encoder jump from 4095 -> 0 - uwu
  * How to implement module offsets
- * How should the wheel move when theta > 90
- * 
+ * How should the wheel move when theta > 90 - uwu
+ * Fix generic encoder with multithread
+ * Write drive train implementation of Swerve class
  * 
  * Organizing PROBLEM
  * If certain modules have different encoder values, then its better to do math in the module class itself
@@ -105,7 +106,7 @@ public class Swerve {
         thetas = MathUtility.normalize(thetas);
 
         for(int i = 0; i < speeds.length; i++) {
-            double angleErr = modules[i].getOffset(thetas[i]);
+            double angleErr = modules[i].getOffsetFromTarget(thetas[i]);
 
             if(angleErr > Math.PI/2) {
                 angleErr -= Math.PI;

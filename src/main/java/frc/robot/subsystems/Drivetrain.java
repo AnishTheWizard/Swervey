@@ -27,7 +27,7 @@ public class Drivetrain extends SubsystemBase {
 
   private static Drivetrain dt = null;
 
-  public static Drivetrain getInstance() {//time to learn singleton classes
+  public static Drivetrain getInstance() {
     if(dt == null)
       dt = new Drivetrain();
     return dt;

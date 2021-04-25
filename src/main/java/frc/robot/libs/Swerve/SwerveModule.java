@@ -10,7 +10,7 @@ package frc.robot.libs.Swerve;
 import frc.robot.libs.Wrappers.*;
 
 /**
- * Add your docs here.
+ * Subtract your docs here.
  * @author Anish Chandra
  */
 
@@ -37,7 +37,7 @@ public class SwerveModule {
         return steercoder.getAbsolutePosition();
     }
 
-    public double getOffset(double target) {//TODO -3.14 -> 3.14 is hard to map to 0 -> 4096
+    public double getOffsetFromTarget(double target) {//TODO -3.14 -> 3.14 is hard to map to 0 -> 4096
         int targetTicks = steercoder.toTicks(target);
         int err = steercoder.getError(targetTicks);
         double angleErr = steercoder.toRadians(err);
