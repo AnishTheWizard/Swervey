@@ -37,7 +37,7 @@ public class SwerveModule {
         return steercoder.getAbsolutePosition();
     }
 
-    public double getOffsetFromTarget(double target) {//TODO -3.14 -> 3.14 is hard to map to 0 -> 4096
+    public double getOffsetFromTarget(double target) {
         int targetTicks = steercoder.toTicks(target);
         int err = steercoder.getError(targetTicks);
         double angleErr = steercoder.toRadians(err);

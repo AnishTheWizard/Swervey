@@ -9,7 +9,9 @@ package frc.robot.libs.Wrappers;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPXConfiguration;
 
 /**
  * Add your docs here.
@@ -17,14 +19,14 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 public class GenericMotor {
 
     //created for 2 current motor types
-    private TalonFX talonF;
+    private TalonFX falcon;
     private VictorSPX victor;
 
     // tf = TalonFX, v = VictorSPX, s = SparkMAX, ts = TalonSRX
-    private String motorType; // i think it was an enum, but no clue how to use those
+    private String motorType;
 
     public GenericMotor(TalonFX motor) {
-        this.talonF = motor;
+        this.falcon = motor;
         motorType = "tf";
     }
     
@@ -36,7 +38,7 @@ public class GenericMotor {
     public void set(double speed) {
         switch(motorType) {
             case "tf":
-                talonF.set(ControlMode.PercentOutput, speed); // TODO don't have to constantly spew numbers at the motor
+                falcon.set(ControlMode.PercentOutput, speed); // TODO don't have to constantly spew numbers at the motor
                 break;
             case "v":
                 victor.set(ControlMode.PercentOutput, speed);
@@ -44,5 +46,11 @@ public class GenericMotor {
         }
     }
 
-
+    public void setConfig(TalonFXConfiguration config) {
+        this.falcon.configAllSettings(config);
+    }
+    
+    public void setConfig(VictorSPXConfiguration config) {
+        this.victor.configAllSettings(config);
+    }
 }

@@ -41,23 +41,36 @@ public class Drivetrain extends SubsystemBase {
 
   private Swerve swerve;
 
+  private TalonFX[] falcons = new TalonFX[Constants.NUMBER_OF_MODULES];
+  private VictorSPX[] victors = new VictorSPX[Constants.NUMBER_OF_MODULES];
+
   private GenericMotor[] drives = new GenericMotor[Constants.NUMBER_OF_MODULES];
   private GenericMotor[] steers = new GenericMotor[Constants.NUMBER_OF_MODULES];
 
   public Drivetrain() {
-    swerve = new Swerve();
+    //These three functions are to make config for motors easier
+    instantiateMotors();
     configMotors();
+    applyGenerics();
+    swerve = new Swerve(drives, steers);
   }
 
   public void instantiateMotors() {
-    for(int i = 0; i < drives.length; i++) {
-      drives[i] = new GenericMotor(new TalonFX(RobotMap.MODULES_DRIVE[i]));
-      steers[i] = new GenericMotor(new VictorSPX(RobotMap.MODULES_STEER[i]));
+    for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
+      falcons[i] = new TalonFX(RobotMap.MODULES_DRIVE[i]);
+      victors[i] = new VictorSPX(RobotMap.MODULES_STEER[i]);
     }
   }
 
   public void configMotors() {
+    //apply various config to motors
+  }
 
+  public void applyGenerics() {
+    for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
+      drives[i] = new GenericMotor(falcons[i]);
+      steers[i] = new GenericMotor(victors[i]);
+    }
   }
 
 

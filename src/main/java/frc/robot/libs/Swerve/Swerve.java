@@ -7,9 +7,6 @@
 
 package frc.robot.libs.Swerve;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.Constants;
@@ -33,7 +30,7 @@ import frc.robot.libs.Wrappers.Gyro;
  * How to implement module offsets
  * How should the wheel move when theta > 90 - uwu
  * Fix generic encoder with multithread
- * Write drive train implementation of Swerve class
+ * Write drive train implementation of Swerve class - uwu
  * 
  * Organizing PROBLEM
  * If certain modules have different encoder values, then its better to do math in the module class itself
@@ -59,11 +56,11 @@ public class Swerve {
 
     
 
-    public Swerve() {
+    public Swerve(GenericMotor[] drives, GenericMotor[] steers) {
 
         for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
-            GenericMotor drive = new GenericMotor(new TalonFX(RobotMap.MODULES_DRIVE[i]));
-            GenericMotor steer = new GenericMotor(new VictorSPX(RobotMap.MODULES_STEER[i]));
+            GenericMotor drive = drives[i];
+            GenericMotor steer = steers[i];
             GenericEncoder steercoder = new GenericEncoder(new AnalogInput(RobotMap.ENCODERS_STEER[i]));
 
             modules[i] = new SwerveModule(drive, steer, steercoder);
@@ -80,7 +77,7 @@ public class Swerve {
     public void control(double x, double y, double rotateMag) {
         // given x, y : find driveSpeed, rotateSpeed
 
-        if(rotateMag < 0.05 || rotateMag > -0.05) {//rotation deadband TODO could move to DT
+        if(rotateMag < 0.05 || rotateMag > -0.05) {
             rotateMag = 0;
         }
 
