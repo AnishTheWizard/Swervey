@@ -7,9 +7,15 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.RobotMap;
 import frc.robot.libs.Swerve.Swerve;
+import frc.robot.libs.Wrappers.GenericMotor;
 
 /**
  * This class is in charge of linking the swerve class to the joysticks, as well as configure various components
@@ -35,8 +41,23 @@ public class Drivetrain extends SubsystemBase {
 
   private Swerve swerve;
 
+  private GenericMotor[] drives = new GenericMotor[Constants.NUMBER_OF_MODULES];
+  private GenericMotor[] steers = new GenericMotor[Constants.NUMBER_OF_MODULES];
+
   public Drivetrain() {
     swerve = new Swerve();
+    configMotors();
+  }
+
+  public void instantiateMotors() {
+    for(int i = 0; i < drives.length; i++) {
+      drives[i] = new GenericMotor(new TalonFX(RobotMap.MODULES_DRIVE[i]));
+      steers[i] = new GenericMotor(new VictorSPX(RobotMap.MODULES_STEER[i]));
+    }
+  }
+
+  public void configMotors() {
+
   }
 
 
