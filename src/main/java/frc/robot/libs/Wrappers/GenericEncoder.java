@@ -20,21 +20,33 @@ public class GenericEncoder {
     private CANCoder canCoder;
 
     //a = analog, c = cancoder
-    private String encoderType;
+    private enum EncoderType {
+        ANALOG,
+        CAN
+    }
+
+    private EncoderType encoderType;
 
 
     public GenericEncoder(AnalogInput analogEncoder) {
         this.analogEncoder = analogEncoder;
-        encoderType = "a";
+        encoderType = EncoderType.ANALOG;
     }
 
     public GenericEncoder(CANCoder canCoder) {
         this.canCoder = canCoder; //default [0, 360)
-        encoderType = "c";
+        encoderType = EncoderType.CAN;
     }
 
     public int getAbsolutePosition() {// [0, 4095]
-        return encoderType.equals("a") ? analogEncoder.getValue() : (int)(canCoder.getAbsolutePosition()/360) * 4095;
+        switch(encoderType) {
+            case ANALOG:
+                return analogEncoder.getValue();
+            case CAN:
+                return (int)(canCoder.getAbsolutePosition()/360) * 4095;
+            default:
+                return -1;
+        }
     }
 
     public int getError(int target) {

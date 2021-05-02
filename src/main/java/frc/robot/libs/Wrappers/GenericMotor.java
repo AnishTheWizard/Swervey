@@ -22,27 +22,34 @@ public class GenericMotor {
     private TalonFX falcon;
     private VictorSPX victor;
 
-    // tf = TalonFX, v = VictorSPX, s = SparkMAX, ts = TalonSRX
-    private String motorType;
+    private enum MotorType {
+        FALCON,
+        VICTOR,
+        SPARK
+    }
+
+    private MotorType motorType;
 
     public GenericMotor(TalonFX motor) {
         this.falcon = motor;
-        motorType = "tf";
+        motorType = MotorType.FALCON;
     }
     
     public GenericMotor(VictorSPX motor) {
         this.victor = motor;
-        motorType = "v";
+        motorType = MotorType.VICTOR;
     }
 
     public void set(double speed) {
         switch(motorType) {
-            case "tf":
+            case FALCON:
                 falcon.set(ControlMode.PercentOutput, speed); // TODO don't have to constantly spew numbers at the motor
                 break;
-            case "v":
+            case VICTOR:
                 victor.set(ControlMode.PercentOutput, speed);
-                break;            
+                break;  
+            default:
+                break;          
         }
     }
 
