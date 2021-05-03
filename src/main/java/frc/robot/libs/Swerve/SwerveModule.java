@@ -7,6 +7,7 @@
 
 package frc.robot.libs.Swerve;
 
+import frc.robot.Constants;
 import frc.robot.libs.Wrappers.*;
 
 /**
@@ -21,11 +22,13 @@ public class SwerveModule {
     private GenericMotor drive;
     private GenericMotor steer;
     private GenericEncoder steercoder;
+    private final int modNum;
 
-    public SwerveModule(GenericMotor drive, GenericMotor steer, GenericEncoder steercoder) {
+    public SwerveModule(GenericMotor drive, GenericMotor steer, GenericEncoder steercoder, int modNum) {
         this.drive = drive;
         this.steer = steer;
         this.steercoder = steercoder;
+        this.modNum = modNum;
     }
 
     public void set(double translate, double rotateMag) {
@@ -38,7 +41,7 @@ public class SwerveModule {
     }
 
     public double getOffsetFromTarget(double target) {
-        int targetTicks = steercoder.toTicks(target);
+        int targetTicks = steercoder.toTicks(target) + Constants.MODULE_OFFSETS[modNum];
         int err = steercoder.getError(targetTicks);
         double angleErr = steercoder.toRadians(err);
         return angleErr;

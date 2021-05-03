@@ -63,7 +63,7 @@ public class Swerve {
             GenericMotor steer = steers[i];
             GenericEncoder steercoder = new GenericEncoder(new AnalogInput(RobotMap.ENCODERS_STEER[i]));
 
-            modules[i] = new SwerveModule(drive, steer, steercoder);
+            modules[i] = new SwerveModule(drive, steer, steercoder, i);
         }
 
         gyro = new Gyro(RobotMap.GYRO);
@@ -91,7 +91,7 @@ public class Swerve {
             double targetVectorY = y + rotationY;
 
             double mag = Math.hypot(targetVectorX, targetVectorY);
-            double theta = Math.atan2(targetVectorY, targetVectorX); //TODO should the wheel spin more than 90 to get to a target?
+            double theta = Math.atan2(targetVectorY, targetVectorX);
 
             theta -= gyro.getRobotRotation(); // field centric
 
