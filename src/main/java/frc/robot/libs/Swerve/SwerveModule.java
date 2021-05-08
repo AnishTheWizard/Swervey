@@ -25,14 +25,12 @@ public class SwerveModule {
     private GenericMotor steer;
     private GenericEncoder steercoder;
     private PIDController steerController;
-    private final int modNum;
 
-    public SwerveModule(GenericMotor drive, GenericMotor steer, GenericEncoder steercoder, PIDController controller, int modNum) {
+    public SwerveModule(GenericMotor drive, GenericMotor steer, GenericEncoder steercoder, PIDController controller) {
         this.drive = drive;
         this.steer = steer;
         this.steercoder = steercoder;
         this.steerController = controller;
-        this.modNum = modNum;
     }
 
     public void set(double translate, double theta) {

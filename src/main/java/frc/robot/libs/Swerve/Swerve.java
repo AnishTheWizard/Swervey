@@ -7,7 +7,6 @@
 
 package frc.robot.libs.Swerve;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -65,7 +64,7 @@ public class Swerve {
             GenericMotor steer = steers[i];
             GenericEncoder steercoder = encoders[i];
 
-            modules[i] = new SwerveModule(drive, steer, steercoder, steerController, i);
+            modules[i] = new SwerveModule(drive, steer, steercoder, steerController);
         }
 
         gyro = new Gyro(RobotMap.GYRO);

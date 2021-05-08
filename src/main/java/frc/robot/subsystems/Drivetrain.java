@@ -8,7 +8,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPXConfiguration;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -43,33 +45,28 @@ public class Drivetrain extends SubsystemBase {
 
   private Swerve swerve;
 
-  private TalonFX[] falcons = new TalonFX[Constants.NUMBER_OF_MODULES];
-  private VictorSPX[] victors = new VictorSPX[Constants.NUMBER_OF_MODULES];
-
-  private AnalogInput[] analogInputs = new AnalogInput[Constants.NUMBER_OF_MODULES];
-
   private GenericMotor[] drives = new GenericMotor[Constants.NUMBER_OF_MODULES];
   private GenericMotor[] steers = new GenericMotor[Constants.NUMBER_OF_MODULES];
 
   private GenericEncoder[] encoders = new GenericEncoder[Constants.NUMBER_OF_MODULES];
 
   public Drivetrain() {
-    // Instantiate each component at the lowest level
-    for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
-      falcons[i] = new TalonFX(RobotMap.MODULES_DRIVE[i]);
-      victors[i] = new VictorSPX(RobotMap.MODULES_STEER[i]);
-      analogInputs[i] = new AnalogInput(RobotMap.ENCODERS_STEER[i]);
-    }
+    TalonFXConfiguration driveConfig = new TalonFXConfiguration();
+    VictorSPXConfiguration steerConfig = new VictorSPXConfiguration();
     
-    //config components here
+    //Set configurations here
+    //i.e. driveConfig.something = something;
 
-
-    //apply generics
     for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
-      drives[i] = new GenericMotor(falcons[i]);
-      steers[i] = new GenericMotor(victors[i]);
-      encoders[i] = new GenericEncoder(analogInputs[i], i);
+      drives[i] = new GenericMotor(new TalonFX(RobotMap.MODULES_DRIVE[i]));
+      steers[i] = new GenericMotor(new VictorSPX(RobotMap.MODULES_STEER[i]));
+
+      drives[i].setConfig(driveConfig);
+      steers[i].setConfig(steerConfig);
+
+      encoders[i] = new GenericEncoder(new AnalogInput(RobotMap.ENCODERS_STEER[i]), i); //if this needs config, create a hashmap of args to pass
     }
+
     swerve = new Swerve(drives, steers, encoders);
   }
   
