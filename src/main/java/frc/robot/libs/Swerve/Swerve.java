@@ -27,7 +27,7 @@ import frc.robot.libs.Wrappers.Gyro;
  * How would field centric mode work - uwu
  * How to fix the atan2's jump in - uwu
  * How to fix the encoder jump from 4095 -> 0 - uwu
- * How to implement module offsets
+ * How to implement module offsets - uwu
  * How should the wheel move when theta > 90 - uwu
  * Fix generic encoder with multithread
  * Write drive train implementation of Swerve class - uwu
@@ -56,19 +56,19 @@ public class Swerve {
 
     
 
-    public Swerve(GenericMotor[] drives, GenericMotor[] steers) {
+    public Swerve(GenericMotor[] drives, GenericMotor[] steers, GenericEncoder[] encoders) {
+
+        steerController = new PIDController(Constants.dtGains[0], Constants.dtGains[1], Constants.dtGains[2]);
 
         for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
             GenericMotor drive = drives[i];
             GenericMotor steer = steers[i];
-            GenericEncoder steercoder = new GenericEncoder(new AnalogInput(RobotMap.ENCODERS_STEER[i]));
+            GenericEncoder steercoder = encoders[i];
 
-            modules[i] = new SwerveModule(drive, steer, steercoder, i);
+            modules[i] = new SwerveModule(drive, steer, steercoder, steerController, i);
         }
 
         gyro = new Gyro(RobotMap.GYRO);
-
-        steerController = new PIDController(Constants.dtGains[0], Constants.dtGains[1], Constants.dtGains[2]);
         
         double ROTATION_ANGLE = Math.atan2((Constants.WIDTH/2), (Constants.LENGTH/2));
         ROTATION_ANGLES = new double[]{ROTATION_ANGLE + Math.PI, Math.PI + ROTATION_ANGLE, ROTATION_ANGLE+Math.PI/2 + Math.PI, ROTATION_ANGLE};
@@ -102,16 +102,8 @@ public class Swerve {
         speeds = MathUtility.normalize(speeds);
         thetas = MathUtility.normalize(thetas);
 
-        for(int i = 0; i < speeds.length; i++) {
-            double angleErr = modules[i].getOffsetFromTarget(thetas[i]);
-
-            if(angleErr > Math.PI/2) {
-                angleErr -= Math.PI;
-                speeds[i] *= -1;
-            }
-
-            double rotate = steerController.calculate(angleErr);
-            modules[i].set(speeds[i], rotate);
+        for(int i = 0; i < modules.length; i++) {
+            modules[i].set(speeds[i], thetas[i]);
         }
     }
 }

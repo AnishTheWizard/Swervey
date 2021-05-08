@@ -18,6 +18,7 @@ import frc.robot.Constants;
 public class GenericEncoder {
     private AnalogInput analogEncoder;
     private CANCoder canCoder;
+    private final int moduleNum;
 
     //a = analog, c = cancoder
     private enum EncoderType {
@@ -27,52 +28,26 @@ public class GenericEncoder {
 
     private EncoderType encoderType;
 
-
-    public GenericEncoder(AnalogInput analogEncoder) {
+    public GenericEncoder(AnalogInput analogEncoder, int moduleNum) {
         this.analogEncoder = analogEncoder;
         encoderType = EncoderType.ANALOG;
+        this.moduleNum = moduleNum;
     }
 
-    public GenericEncoder(CANCoder canCoder) {
+    public GenericEncoder(CANCoder canCoder, int moduleNum) {
         this.canCoder = canCoder; //default [0, 360)
         encoderType = EncoderType.CAN;
+        this.moduleNum = moduleNum;
     }
 
     public int getAbsolutePosition() {// [0, 4095]
         switch(encoderType) {
             case ANALOG:
-                return analogEncoder.getValue();
+                return analogEncoder.getValue() + Constants.MODULE_OFFSETS[moduleNum];
             case CAN:
-                return (int)(canCoder.getAbsolutePosition()/360) * 4095;
+                return ((int)(canCoder.getAbsolutePosition()/360) * 4095) + Constants.MODULE_OFFSETS[moduleNum];
             default:
                 return -1;
         }
-    }
-
-    public int getError(int target) {
-        int currentPose = getAbsolutePosition();
-        int err = target - currentPose;
-
-        if(Math.abs(err) > Constants.OVERFLOW_THRESHOLD) {//fix encoder jumps from 4095 -> 0, and 0 -> 4095
-            if(err < 0) {
-                target+=Constants.TICKS_PER_ROTATION;
-            }
-            else if(err > 0){
-                currentPose += Constants.TICKS_PER_ROTATION;
-            }
-            err = target - currentPose;
-        }
-        return err;
-    }
-
-    public int toTicks(double radians) {
-        if(radians < 0) {
-            radians += Math.PI * 2; //atan returns -pi -> pi, if its negative, hard to map to encoder 0 -> 4096
-        }
-        return (int)((radians * Constants.TICKS_PER_ROTATION)/(Math.PI*2));
-    }
-
-    public double toRadians(int ticks) {
-        return (ticks * Math.PI * 2)/Constants.TICKS_PER_ROTATION;
     }
 }

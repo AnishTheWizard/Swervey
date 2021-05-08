@@ -1,5 +1,7 @@
 package frc.robot.libs.Utils;
 
+import frc.robot.Constants;
+
 public class MathUtility {
     public static double[] normalize(double[] ds) {
         double maxVal = 1;
@@ -14,5 +16,16 @@ public class MathUtility {
         }
 
         return ds;
+    }
+
+    public static int toTicks(double radians) {
+        if(radians < 0) {
+            radians += Math.PI * 2; //atan returns -pi -> pi, if its negative, hard to map to encoder 0 -> 4096
+        }
+        return (int)((radians * Constants.TICKS_PER_ROTATION)/(Math.PI*2));
+    }
+
+    public static double toRadians(int ticks) {
+        return (ticks * Math.PI * 2)/Constants.TICKS_PER_ROTATION;
     }
 }

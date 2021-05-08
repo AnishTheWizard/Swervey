@@ -10,11 +10,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.libs.Swerve.Swerve;
+import frc.robot.libs.Wrappers.GenericEncoder;
 import frc.robot.libs.Wrappers.GenericMotor;
 
 /**
@@ -44,36 +46,32 @@ public class Drivetrain extends SubsystemBase {
   private TalonFX[] falcons = new TalonFX[Constants.NUMBER_OF_MODULES];
   private VictorSPX[] victors = new VictorSPX[Constants.NUMBER_OF_MODULES];
 
+  private AnalogInput[] analogInputs = new AnalogInput[Constants.NUMBER_OF_MODULES];
+
   private GenericMotor[] drives = new GenericMotor[Constants.NUMBER_OF_MODULES];
   private GenericMotor[] steers = new GenericMotor[Constants.NUMBER_OF_MODULES];
 
-  public Drivetrain() {
-    //These three functions are to make config for motors easier
-    instantiateMotors();
-    configMotors();
-    applyGenerics();
-    swerve = new Swerve(drives, steers);
-  }
+  private GenericEncoder[] encoders = new GenericEncoder[Constants.NUMBER_OF_MODULES];
 
-  public void instantiateMotors() {
+  public Drivetrain() {
+    // Instantiate each component at the lowest level
     for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
       falcons[i] = new TalonFX(RobotMap.MODULES_DRIVE[i]);
       victors[i] = new VictorSPX(RobotMap.MODULES_STEER[i]);
+      analogInputs[i] = new AnalogInput(RobotMap.ENCODERS_STEER[i]);
     }
-  }
+    
+    //config components here
 
-  public void configMotors() {
-    //apply various config to motors
-  }
 
-  public void applyGenerics() {
+    //apply generics
     for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
       drives[i] = new GenericMotor(falcons[i]);
       steers[i] = new GenericMotor(victors[i]);
+      encoders[i] = new GenericEncoder(analogInputs[i], i);
     }
+    swerve = new Swerve(drives, steers, encoders);
   }
-
-
   
   @Override
   public void periodic() {
