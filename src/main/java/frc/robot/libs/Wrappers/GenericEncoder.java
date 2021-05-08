@@ -20,7 +20,6 @@ public class GenericEncoder {
     private CANCoder canCoder;
     private final int moduleNum;
 
-    //a = analog, c = cancoder
     private enum EncoderType {
         ANALOG,
         CAN

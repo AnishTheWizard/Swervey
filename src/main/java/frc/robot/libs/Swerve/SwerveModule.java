@@ -38,7 +38,7 @@ public class SwerveModule {
         int ticksErr = getError(targetTicks);
 
         if(ticksErr > Constants.TICKS_PER_ROTATION * 0.25) {
-            ticksErr -= Constants.TICKS_PER_ROTATION/2; //TODO verify math 90 deg
+            ticksErr -= Constants.TICKS_PER_ROTATION/2;
             translate *= -1;
         }
 

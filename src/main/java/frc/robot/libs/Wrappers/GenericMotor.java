@@ -21,8 +21,6 @@ public class GenericMotor {
     //created for 2 current motor types
     private TalonFX falcon;
     private VictorSPX victor;
-    
-    private double lastMotorSpeed;
 
     private enum MotorType {
         FALCON,
