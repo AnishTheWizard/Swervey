@@ -69,6 +69,10 @@ public class Drivetrain extends SubsystemBase {
 
     swerve = new Swerve(drives, steers, encoders);
   }
+
+  public void zeroGyro() {
+    swerve.zeroGyro();
+  }
   
   @Override
   public void periodic() {
@@ -76,6 +80,6 @@ public class Drivetrain extends SubsystemBase {
     double x = RobotContainer.getInstance().getLeftX();
     double y = RobotContainer.getInstance().getLeftY();
     double rotate = RobotContainer.getInstance().getRightX();
-    swerve.control(-x, y, -rotate); //right x is negative
+    swerve.control(x, y, rotate); //right x is negative
   }
 }

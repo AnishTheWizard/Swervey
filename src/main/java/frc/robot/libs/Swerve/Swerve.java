@@ -105,4 +105,8 @@ public class Swerve {
             modules[i].set(speeds[i], thetas[i]);
         }
     }
+
+    public void zeroGyro() {
+        gyro.zeroRobotRotation();
+    }
 }
