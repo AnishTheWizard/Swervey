@@ -8,12 +8,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.libs.Wrappers.Controller;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -29,11 +30,12 @@ public class RobotContainer {
 
   private final Drivetrain dt;
 
-  private final Joystick driver = new Joystick(0);
+  private final Controller driver = new Controller(0);
 
-  private static RobotContainer rc = null;
+
   
 
+  private static RobotContainer rc = null;
 
   public static RobotContainer getInstance() {
     if(rc == null)
@@ -59,6 +61,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    driver.getSELECTButton().whenPressed(new InstantCommand(dt :: zeroGyro, dt));
   }
 
 
@@ -73,18 +76,18 @@ public class RobotContainer {
   }
 
   public double getLeftX() {
-    return driver.getX();
+    return driver.getLeftJoyX();
   }
 
   public double getLeftY() {
-    return driver.getY();
+    return driver.getLeftJoyY();
   }
 
   public double getRightX() {
-    return driver.getRawAxis(4);
+    return driver.getRightJoyX();
   }
 
   public double getAxis(int id) {
-    return driver.getRawAxis(id);
+    return driver.getAxis(id);
   }
 }

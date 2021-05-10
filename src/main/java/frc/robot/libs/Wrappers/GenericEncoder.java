@@ -10,6 +10,7 @@ package frc.robot.libs.Wrappers;
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import frc.robot.Constants;
 
 /**
  * Add your docs here.
@@ -17,22 +18,35 @@ import edu.wpi.first.wpilibj.AnalogInput;
 public class GenericEncoder {
     private AnalogInput analogEncoder;
     private CANCoder canCoder;
+    private final int moduleNum;
 
-    //a = analog, c = cancoder
-    private String encoderType;
-
-
-    public GenericEncoder(AnalogInput analogEncoder) {
-        this.analogEncoder = analogEncoder;
-        encoderType = "a";
+    private enum EncoderType {
+        ANALOG,
+        CAN
     }
 
-    public GenericEncoder(CANCoder canCoder) {
+    private EncoderType encoderType;
+
+    public GenericEncoder(AnalogInput analogEncoder, int moduleNum) {
+        this.analogEncoder = analogEncoder;
+        encoderType = EncoderType.ANALOG;
+        this.moduleNum = moduleNum;
+    }
+
+    public GenericEncoder(CANCoder canCoder, int moduleNum) {
         this.canCoder = canCoder; //default [0, 360)
-        encoderType = "c";
+        encoderType = EncoderType.CAN;
+        this.moduleNum = moduleNum;
     }
 
     public int getAbsolutePosition() {// [0, 4095]
-        return encoderType == "a" ? analogEncoder.getValue() : (int)(canCoder.getAbsolutePosition()/360) * 4095;
+        switch(encoderType) {
+            case ANALOG:
+                return analogEncoder.getValue() + Constants.MODULE_OFFSETS[moduleNum];
+            case CAN:
+                return ((int)(canCoder.getAbsolutePosition()/360) * 4095) + Constants.MODULE_OFFSETS[moduleNum];
+            default:
+                return -1;
+        }
     }
 }

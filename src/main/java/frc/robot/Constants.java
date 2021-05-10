@@ -21,6 +21,10 @@ public final class Constants {
     public static final double WIDTH = 23.5;
     public static final double LENGTH = 21.5;
 
-    public static double[] dtGains = {0.0, 0.0, 0.0};
-    public static int NUMBER_OF_MODULES = 4;
+    public static final double[] dtGains = {0.0, 0.0, 0.0};
+    public static final int NUMBER_OF_MODULES = 4;
+
+    public static final int TICKS_PER_ROTATION = 4096;
+
+    public static final int OVERFLOW_THRESHOLD = 3900;
 }

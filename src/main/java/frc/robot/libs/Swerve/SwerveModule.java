@@ -7,10 +7,13 @@
 
 package frc.robot.libs.Swerve;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
+import frc.robot.Constants;
+import frc.robot.libs.Utils.MathUtility;
 import frc.robot.libs.Wrappers.*;
 
 /**
- * Add your docs here.
+ * Subtract your docs here.
  * @author Anish Chandra
  */
 
@@ -21,19 +24,43 @@ public class SwerveModule {
     private GenericMotor drive;
     private GenericMotor steer;
     private GenericEncoder steercoder;
+    private PIDController steerController;
 
-    public SwerveModule(GenericMotor drive, GenericMotor steer, GenericEncoder steercoder) {
+    public SwerveModule(GenericMotor drive, GenericMotor steer, GenericEncoder steercoder, PIDController controller) {
         this.drive = drive;
         this.steer = steer;
         this.steercoder = steercoder;
+        this.steerController = controller;
     }
 
-    public void set(double translate, double rotateMag) {
+    public void set(double translate, double theta) {
+        int targetTicks = MathUtility.toTicks(theta);
+        int ticksErr = getError(targetTicks);
+
+        if(ticksErr > Constants.TICKS_PER_ROTATION * 0.25) {
+            ticksErr -= Constants.TICKS_PER_ROTATION/2;
+            translate *= -1;
+        }
+
+        double rotateMag = steerController.calculate(ticksErr);
+
         drive.set(translate);
         steer.set(rotateMag);
     }
 
-    public int getRotation() {
-        return steercoder.getAbsolutePosition();
+    public int getError(int target) {
+        int currentPose = steercoder.getAbsolutePosition();
+        int err = target - currentPose;
+
+        if(Math.abs(err) > Constants.OVERFLOW_THRESHOLD) {//fix encoder jumps from 4095 -> 0, and 0 -> 4095
+            if(err < 0) {
+                target+=Constants.TICKS_PER_ROTATION;
+            }
+            else if(err > 0){
+                currentPose += Constants.TICKS_PER_ROTATION;
+            }
+            err = target - currentPose;
+        }
+        return err;
     }
 }
