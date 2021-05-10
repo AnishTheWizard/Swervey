@@ -22,6 +22,8 @@ public class GenericMotor {
     private TalonFX falcon;
     private VictorSPX victor;
 
+    private double lastMotorSpeed;
+
     private enum MotorType {
         FALCON,
         VICTOR,
@@ -41,15 +43,19 @@ public class GenericMotor {
     }
 
     public void set(double speed) {
-        switch(motorType) {
-            case FALCON:
-                falcon.set(ControlMode.PercentOutput, speed); // TODO don't have to constantly spew numbers at the motor
-                break;
-            case VICTOR:
-                victor.set(ControlMode.PercentOutput, speed);
-                break;  
-            default:
-                break;          
+        if(speed != lastMotorSpeed) {
+            switch(motorType) {
+                case FALCON:
+                    falcon.set(ControlMode.PercentOutput, speed); // TODO don't have to constantly spew numbers at the motor
+                    break;
+                case VICTOR:
+                    victor.set(ControlMode.PercentOutput, speed);
+                    break;  
+                default:
+                    break;          
+            }
+
+            lastMotorSpeed = speed;
         }
     }
 
