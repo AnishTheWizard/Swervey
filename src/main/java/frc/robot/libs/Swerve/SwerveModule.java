@@ -26,11 +26,16 @@ public class SwerveModule {
     private GenericEncoder steercoder;
     private PIDController steerController;
 
+    private double x, y;
+
     public SwerveModule(GenericMotor drive, GenericMotor steer, GenericEncoder steercoder, PIDController controller) {
         this.drive = drive;
         this.steer = steer;
         this.steercoder = steercoder;
         this.steerController = controller;
+
+        this.x = 0.0;
+        this.y = 0.0;
     }
 
     public void set(double translate, double theta) {
@@ -46,6 +51,15 @@ public class SwerveModule {
 
         drive.set(translate);
         steer.set(rotateMag);
+    }
+
+    public void updatePose(double x, double y) {
+        this.x += x * drive.getSensorOffset();
+        this.y += y * drive.getSensorOffset();
+    }
+
+    public double[] getModulePosition() {
+        return new double[]{x, y};
     }
 
     public int getError(int target) {

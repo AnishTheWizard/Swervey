@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -56,6 +57,7 @@ public class Drivetrain extends SubsystemBase {
     
     //Set configurations here
     //i.e. driveConfig.something = something;
+    driveConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
 
     for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
       drives[i] = new GenericMotor(new TalonFX(RobotMap.MODULES_DRIVE[i]));
@@ -72,6 +74,10 @@ public class Drivetrain extends SubsystemBase {
 
   public void zeroGyro() {
     swerve.zeroGyro();
+  }
+
+  public void resetPose() {
+    swerve.resetPose();
   }
   
   @Override
