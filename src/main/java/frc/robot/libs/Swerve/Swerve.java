@@ -115,12 +115,21 @@ public class Swerve {
     }
 
     public double[] getPose() {
-
-        return new double[]{0.0, 6.9};
+        double xSum = 0;
+        double ySum = 0;
+        for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
+            double[] modPoses = modules[i].getModulePosition();
+            xSum += modPoses[0];
+            ySum += modPoses[1];
+        }
+        return new double[]{xSum/Constants.NUMBER_OF_MODULES, ySum/Constants.NUMBER_OF_MODULES};
     }
 
     public void setPose(double x, double y, double angle) {
-        
+    }
+    
+    public double getRotation() {
+        return gyro.getRobotRotation(); //current bobot rotation
     }
 
     public void resetPose() {
