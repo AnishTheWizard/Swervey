@@ -58,6 +58,11 @@ public class SwerveModule {
         this.y += drive.getSensorOffset() * y;
     }
 
+    public void resetPose() {
+        this.x = 0;
+        this.y = 0;
+    }
+
     public double[] getModulePosition() {
         return new double[]{x, y};
     }

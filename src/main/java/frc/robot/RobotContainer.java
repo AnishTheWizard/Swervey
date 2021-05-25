@@ -10,7 +10,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.libs.Pathing.Recorder;
 import frc.robot.libs.Wrappers.Controller;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -30,8 +29,6 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   private final Drivetrain dt;
-
-  private final Recorder recorder;
   
   private final Controller driver = new Controller(0);
 
@@ -55,7 +52,6 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     dt = Drivetrain.getInstance();
-    recorder = Recorder.getInstance();
   }
 
   /**
@@ -67,6 +63,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driver.getSELECTButton().whenPressed(new InstantCommand(dt :: zeroGyro, dt));
     driver.getSTARTButton().whenPressed(new InstantCommand(dt :: resetPose, dt));
+    driver.getBButton().whenPressed(new InstantCommand(dt :: toggleRecording, dt));
+    driver.getYButton().whenPressed(new InstantCommand(dt :: toggleExecutor, dt));
   }
 
 

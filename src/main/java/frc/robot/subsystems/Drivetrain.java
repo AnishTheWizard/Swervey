@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
+import frc.robot.libs.Pathing.PathingMotion;
 import frc.robot.libs.Swerve.Swerve;
 import frc.robot.libs.Wrappers.GenericEncoder;
 import frc.robot.libs.Wrappers.GenericMotor;
@@ -76,6 +77,14 @@ public class Drivetrain extends SubsystemBase {
     swerve.zeroGyro();
   }
 
+  public void toggleRecording() {
+    PathingMotion.Recorder.toggleRecorder();
+  }
+
+  public void toggleExecutor() {
+    PathingMotion.Executor.toggleExecutor();
+  }
+
   public void resetPose() {
     swerve.resetPose();
   }
@@ -87,5 +96,8 @@ public class Drivetrain extends SubsystemBase {
     double y = RobotContainer.getInstance().getLeftY();
     double rotate = RobotContainer.getInstance().getRightX();
     swerve.control(x, y, rotate); //right x is negative
+    double[] pose = swerve.getPose();
+    PathingMotion.Recorder.recordPose(pose[0], pose[1], pose[2]);
+
   }
 }

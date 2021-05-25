@@ -51,12 +51,7 @@ public class Swerve {
     private double[] speeds;
     private double[] thetas;
 
-    private final double[] ROTATION_ANGLES;
-
-    private int x;
-    private int y;
-
-    
+    private final double[] ROTATION_ANGLES;   
 
     public Swerve(GenericMotor[] drives, GenericMotor[] steers, GenericEncoder[] encoders) {
 
@@ -74,8 +69,8 @@ public class Swerve {
         
         double ROTATION_ANGLE = Math.atan2((Constants.WIDTH/2), (Constants.LENGTH/2));
         ROTATION_ANGLES = new double[]{ROTATION_ANGLE + Math.PI, Math.PI + ROTATION_ANGLE, ROTATION_ANGLE+Math.PI/2 + Math.PI, ROTATION_ANGLE};
-        this.x = 0;
-        this.y = 0;
+        // this.x = 0;
+        // this.y = 0;
     }
 
     public void control(double x, double y, double rotateMag) {
@@ -122,10 +117,7 @@ public class Swerve {
             xSum += modPoses[0];
             ySum += modPoses[1];
         }
-        return new double[]{xSum/Constants.NUMBER_OF_MODULES, ySum/Constants.NUMBER_OF_MODULES};
-    }
-
-    public void setPose(double x, double y, double angle) {
+        return new double[]{xSum/Constants.NUMBER_OF_MODULES, ySum/Constants.NUMBER_OF_MODULES, gyro.getRobotRotation()};
     }
     
     public double getRotation() {
@@ -133,8 +125,9 @@ public class Swerve {
     }
 
     public void resetPose() {
-        x = 0;
-        y = 0;
+        for(SwerveModule mod : modules) {
+            mod.resetPose();
+        }
     }
 
     public void zeroGyro() {
