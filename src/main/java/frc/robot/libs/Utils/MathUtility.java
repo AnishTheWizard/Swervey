@@ -18,6 +18,15 @@ public class MathUtility {
         return ds;
     }
 
+    public static double toFeet(double x) { // from ticks
+        return x * 12 / Constants.TICKS_PER_ROTATION;
+    }
+
+    public static double applyGearRatio(double ticks) {
+        double turns = ticks/Constants.TICKS_PER_ROTATION;
+        return turns / Constants.GEAR_RATIO;
+    }
+
     public static int toTicks(double radians) {
         if(radians < 0) {
             radians += Math.PI * 2; //atan returns -pi -> pi, if its negative, hard to map to encoder 0 -> 4096

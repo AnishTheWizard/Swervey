@@ -64,7 +64,7 @@ public class SwerveModule {
     }
 
     public double[] getModulePosition() {
-        return new double[]{x, y};
+        return new double[]{MathUtility.toFeet(MathUtility.applyGearRatio(x)), MathUtility.toFeet(MathUtility.applyGearRatio(y))};
     }
 
     public int getError(int target) {
