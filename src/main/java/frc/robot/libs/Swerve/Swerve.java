@@ -97,12 +97,14 @@ public class Swerve {
             speeds[i] = mag;
             thetas[i] = theta;
         }
+     
+        double transferAngle = gyro.getRobotRotation();
 
         speeds = MathUtility.normalize(speeds);
         thetas = MathUtility.normalize(thetas);
 
         for(int i = 0; i < modules.length; i++) {
-            modules[i].set(speeds[i], thetas[i]);
+            modules[i].set(speeds[i], thetas[i], transferAngle);
         }
 
         
