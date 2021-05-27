@@ -102,7 +102,6 @@ public class Swerve {
         thetas = MathUtility.normalize(thetas);
 
         for(int i = 0; i < modules.length; i++) {
-            modules[i].updatePose(x, y);
             modules[i].set(speeds[i], thetas[i]);
         }
 

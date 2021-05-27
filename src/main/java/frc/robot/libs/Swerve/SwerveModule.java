@@ -26,6 +26,8 @@ public class SwerveModule {
     private GenericEncoder steercoder;
     private PIDController steerController;
 
+    private boolean switcher; //alterates between true or false depending on when you change it
+
     private double x, y;
 
     public SwerveModule(GenericMotor drive, GenericMotor steer, GenericEncoder steercoder, PIDController controller) {
@@ -39,23 +41,33 @@ public class SwerveModule {
     }
 
     public void set(double translate, double theta) {
+        double xChange = drive.getSensorOffset();
+        double yChange = drive.getSensorOffset();
+
         int targetTicks = MathUtility.toTicks(theta);
         int ticksErr = getError(targetTicks);
 
         if(ticksErr > Constants.TICKS_PER_ROTATION * 0.25) {
             ticksErr -= Constants.TICKS_PER_ROTATION/2;
             translate *= -1;
+            switcher = !switcher;
         }
+        if(switcher) {
+            xChange *= Math.cos(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2);
+            yChange *= Math.sin(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2);
+        }
+        else {
+            xChange *= Math.cos(MathUtility.toRadians(steercoder.getAbsolutePosition()));
+            yChange *= Math.sin(MathUtility.toRadians(steercoder.getAbsolutePosition()));
+        }
+
+        this.x += xChange;
+        this.y += yChange;
 
         double rotateMag = steerController.calculate(ticksErr);
 
         drive.set(translate);
         steer.set(rotateMag);
-    }
-
-    public void updatePose(double x, double y) {
-        this.x += drive.getSensorOffset() * x;
-        this.y += drive.getSensorOffset() * y;
     }
 
     public void resetPose() {
