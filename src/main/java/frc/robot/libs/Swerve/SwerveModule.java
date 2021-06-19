@@ -40,7 +40,7 @@ public class SwerveModule {
         this.y = 0.0;
     }
 
-    public void set(double translate, double theta) {
+    public void set(double translate, double theta, double gyroAngle) {
         double xChange = drive.getSensorOffset();
         double yChange = drive.getSensorOffset();
 
@@ -53,12 +53,12 @@ public class SwerveModule {
             switcher = !switcher;
         }
         if(switcher) {
-            xChange *= Math.cos(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2);
-            yChange *= Math.sin(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2);
+            xChange *= Math.cos(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2 - gyroAngle);
+            yChange *= Math.sin(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2 - gyroAngle);
         }
         else {
-            xChange *= Math.cos(MathUtility.toRadians(steercoder.getAbsolutePosition()));
-            yChange *= Math.sin(MathUtility.toRadians(steercoder.getAbsolutePosition()));
+            xChange *= Math.cos(MathUtility.toRadians(steercoder.getAbsolutePosition()) - gyroAngle);
+            yChange *= Math.sin(MathUtility.toRadians(steercoder.getAbsolutePosition()) - gyroAngle);
         }
 
         this.x += xChange;
