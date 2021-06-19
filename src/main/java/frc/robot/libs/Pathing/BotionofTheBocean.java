@@ -1,16 +1,19 @@
 package frc.robot.libs.Pathing;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class PathingMotion {
+public class BotionofTheBocean {
 
-    private static PathingMotion pather = null;
-    public static PathingMotion getInstance() {
+    private static BotionofTheBocean pather = null;
+    public static BotionofTheBocean getInstance() {
         if(pather == null) 
-            pather = new PathingMotion();
+            pather = new BotionofTheBocean();
         return pather;
     }
 
@@ -60,6 +63,7 @@ public class PathingMotion {
 
     public static class Executor {
         private static boolean isPlaying;
+        private static int line; 
 
         public Executor() {
             isPlaying = false;
@@ -68,5 +72,25 @@ public class PathingMotion {
         public static void toggleExecutor() {
             isPlaying = !isPlaying;
         }
+
+        public static double[] read() {
+            BufferedReader reader = null;
+            try {
+                reader = new BufferedReader(new FileReader("recording.csv"));
+                String line = reader.readLine();
+                while(line != null) {
+                    String[] data = line.split(", ");
+                    
+
+                }
+
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return new double[]{0.0, 0.0};
+        }
+
+
     }
 }

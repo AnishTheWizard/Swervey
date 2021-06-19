@@ -23,7 +23,7 @@ public class GenericMotor {
     private VictorSPX victor;
 
     private double lastMotorSpeed;
-    private int lastSensorPose;
+    private double lastSensorPose;
 
     private enum MotorType {
         FALCON,
@@ -62,7 +62,7 @@ public class GenericMotor {
     }
 
     public int getSensorOffset() {
-        int offset = 0;
+        double offset = 0;
         switch(motorType) {
             case FALCON:
                 offset = falcon.getSelectedSensorPosition() - lastSensorPose;
@@ -72,7 +72,7 @@ public class GenericMotor {
                 lastSensorPose = victor.getSelectedSensorPosition();
         }
         
-        return offset;
+        return (int) offset;
     }
 
     public void setConfig(TalonFXConfiguration config) {
