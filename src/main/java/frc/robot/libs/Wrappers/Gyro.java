@@ -7,6 +7,7 @@
 
 package frc.robot.libs.Wrappers;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 /**
@@ -20,11 +21,23 @@ public class Gyro {
         gyro = new PigeonIMU(port);
         zeroRobotRotation();
     }
+    public Gyro(TalonSRX gyroController) {
+        gyro = new PigeonIMU(gyroController);
+        zeroRobotRotation();
+    }
 
     public double getRobotRotation() {
         double[] ypr = new double[3];
         gyro.getYawPitchRoll(ypr);
-        return Math.toRadians(ypr[0]);
+
+        double rad = Math.toRadians(ypr[0]);
+        if(rad > 2 * Math.PI) {
+            rad = rad % (2 * Math.PI);
+        }
+        else if(rad < 0) {
+            rad = (2 * Math.PI) - (rad % (2 * Math.PI));
+        }
+        return rad;
     }
 
     public void zeroRobotRotation() {

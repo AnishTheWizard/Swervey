@@ -30,7 +30,7 @@ public class Controller {//might be useful later, idk
     }
 
     public double getLeftJoyX() {
-        return -controller.getX();
+        return controller.getX();
     }
 
     public double getLeftJoyY() {
@@ -46,11 +46,11 @@ public class Controller {//might be useful later, idk
     }
 
     public double getRightJoyX() {
-        return -controller.getRawAxis(4);
+        return controller.getRawAxis(4);
     }
 
     public double getRightJoyY() {
-        return controller.getRawAxis(5);
+        return -controller.getRawAxis(5);
     }
 
     public JoystickButton getAButton() {

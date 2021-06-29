@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPXConfiguration;
+import com.revrobotics.CANSparkMax;
 
 /**
  * Add your docs here.
@@ -21,6 +22,7 @@ public class GenericMotor {
     //created for 2 current motor types
     private TalonFX falcon;
     private VictorSPX victor;
+    private CANSparkMax spark;
 
     private double lastMotorSpeed;
     private double lastSensorPose;
@@ -28,6 +30,7 @@ public class GenericMotor {
     private enum MotorType {
         FALCON,
         VICTOR,
+        SPARK,
     }
 
     private MotorType motorType;
@@ -44,6 +47,12 @@ public class GenericMotor {
         this.lastSensorPose = 0;
     }
 
+    public GenericMotor(CANSparkMax spark) {
+        this.spark = spark;
+        motorType = MotorType.SPARK;
+        this.lastSensorPose = 0;
+    }
+
     public void set(double speed) {
         if(speed != lastMotorSpeed) {
             switch(motorType) {
@@ -52,7 +61,10 @@ public class GenericMotor {
                     break;
                 case VICTOR:
                     victor.set(ControlMode.PercentOutput, speed);
-                    break;  
+                    break; 
+                case SPARK:
+                    spark.set(speed);
+                    break;
                 default:
                     break;          
             }
@@ -70,8 +82,10 @@ public class GenericMotor {
             case VICTOR:
                 offset = victor.getSelectedSensorPosition() - lastSensorPose;
                 lastSensorPose = victor.getSelectedSensorPosition();
+            case SPARK:
+                offset = spark.getEncoder().getPosition() - lastSensorPose;
+                lastSensorPose = spark.getEncoder().getPosition();
         }
-        
         return (int) offset;
     }
 

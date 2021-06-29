@@ -61,10 +61,10 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driver.getSELECTButton().whenPressed(new InstantCommand(dt :: zeroGyro, dt));
-    driver.getSTARTButton().whenPressed(new InstantCommand(dt :: resetPose, dt));
-    driver.getBButton().whenPressed(new InstantCommand(dt :: toggleRecording, dt));
-    driver.getYButton().whenPressed(new InstantCommand(dt :: toggleExecutor, dt));
+    driver.getSELECTButton().whenPressed(() -> dt.zeroGyro());
+    //driver.getSTARTButton().whenPressed(new InstantCommand(dt :: resetPose, dt));
+   // driver.getBButton().whenPressed(new InstantCommand(dt :: toggleRecording, dt));
+    //driver.getYButton().whenPressed(new InstantCommand(dt :: toggleExecutor, dt));
   }
 
 

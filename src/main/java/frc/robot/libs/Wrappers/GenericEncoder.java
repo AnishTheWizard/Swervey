@@ -42,7 +42,7 @@ public class GenericEncoder {
     public int getAbsolutePosition() {// [0, 4095]
         switch(encoderType) {
             case ANALOG:
-                return analogEncoder.getValue() + Constants.MODULE_OFFSETS[moduleNum];
+                return analogEncoder.getValue() - Constants.MODULE_OFFSETS[moduleNum];
             case CAN:
                 return ((int)(canCoder.getAbsolutePosition()/360) * 4095) + Constants.MODULE_OFFSETS[moduleNum];
             default:

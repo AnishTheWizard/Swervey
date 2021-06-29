@@ -8,6 +8,7 @@
 package frc.robot.libs.Swerve;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.libs.Utils.MathUtility;
 import frc.robot.libs.Wrappers.*;
@@ -38,6 +39,8 @@ public class SwerveModule {
 
         this.x = 0.0;
         this.y = 0.0;
+
+        this.switcher = false;
     }
 
     public void set(double translate, double theta, double gyroAngle) {
@@ -45,13 +48,16 @@ public class SwerveModule {
         double yChange = drive.getSensorOffset();
 
         int targetTicks = MathUtility.toTicks(theta);
-        int ticksErr = getError(targetTicks);
+        double angleErr = MathUtility.toRadians(getError(targetTicks));
 
-        if(ticksErr > Constants.TICKS_PER_ROTATION * 0.25) {
-            ticksErr -= Constants.TICKS_PER_ROTATION/2;
+        SmartDashboard.putNumber("err", angleErr);
+
+        if(angleErr > Math.PI/2) {
+            angleErr -= Math.PI;
             translate *= -1;
             switcher = !switcher;
         }
+
         if(switcher) {
             xChange *= Math.cos(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2 - gyroAngle);
             yChange *= Math.sin(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2 - gyroAngle);
@@ -64,10 +70,12 @@ public class SwerveModule {
         this.x += xChange;
         this.y += yChange;
 
-        double rotateMag = steerController.calculate(ticksErr);
+        double rotateMag = steerController.calculate(angleErr);
 
         drive.set(translate);
         steer.set(rotateMag);
+        SmartDashboard.putNumber("trans", translate);
+        SmartDashboard.putNumber("rotate mag", rotateMag);
     }
 
     public void resetPose() {
@@ -93,5 +101,9 @@ public class SwerveModule {
             err = target - currentPose;
         }
         return err;
+    }
+
+    public int getCurrentRotationalPose() {
+        return steercoder.getAbsolutePosition();
     }
 }

@@ -12,8 +12,11 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPXConfiguration;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -53,19 +56,19 @@ public class Drivetrain extends SubsystemBase {
   private GenericEncoder[] encoders = new GenericEncoder[Constants.NUMBER_OF_MODULES];
 
   public Drivetrain() {
-    TalonFXConfiguration driveConfig = new TalonFXConfiguration();
-    VictorSPXConfiguration steerConfig = new VictorSPXConfiguration();
+    // TalonFXConfiguration driveConfig = new TalonFXConfiguration();
+    // VictorSPXConfiguration steerConfig = new VictorSPXConfiguration();
     
     //Set configurations here
     //i.e. driveConfig.something = something;
-    driveConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
+    // driveConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
 
     for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
-      drives[i] = new GenericMotor(new TalonFX(RobotMap.MODULES_DRIVE[i]));
-      steers[i] = new GenericMotor(new VictorSPX(RobotMap.MODULES_STEER[i]));
+      drives[i] = new GenericMotor(new CANSparkMax(RobotMap.MODULES_DRIVE[i], MotorType.kBrushless));
+      steers[i] = new GenericMotor(new CANSparkMax(RobotMap.MODULES_STEER[i], MotorType.kBrushless));
 
-      drives[i].setConfig(driveConfig);
-      steers[i].setConfig(steerConfig);
+      // drives[i].setConfig(driveConfig);
+      // steers[i].setConfig(steerConfig);
 
       encoders[i] = new GenericEncoder(new AnalogInput(RobotMap.ENCODERS_STEER[i]), i); //if this needs config, create a hashmap of args to pass
     }
@@ -97,7 +100,13 @@ public class Drivetrain extends SubsystemBase {
     double rotate = RobotContainer.getInstance().getRightX();
     swerve.control(x, y, rotate); //right x is negative
     double[] pose = swerve.getPose();
-    BotionofTheBocean.Recorder.recordPose(pose[0], pose[1], pose[2]);
+    SmartDashboard.putNumber("x-coord", pose[0]);
+    SmartDashboard.putNumber("y-coord", pose[1]);
+
+    SmartDashboard.putNumber("x-vel", x);
+    SmartDashboard.putNumber("y-vel", y);
+    SmartDashboard.putNumber("rotate-vel", rotate);
+    //BotionofTheBocean.Recorder.recordPose(pose[0], pose[1], pose[2]);
 
   }
 }
