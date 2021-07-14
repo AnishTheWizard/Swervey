@@ -89,6 +89,10 @@ public class GenericMotor {
         return (int) offset;
     }
 
+    public double getCurrent() {
+       return spark.getOutputCurrent();
+    }
+
     public void setConfig(TalonFXConfiguration config) {
         this.falcon.configAllSettings(config);
     }

@@ -127,6 +127,7 @@ public class Swerve {
             SmartDashboard.putNumber(i+"th module targetVecX", targetVectorX);
             SmartDashboard.putNumber(i+"th module current rotation RAD", MathUtility.toRadians(modules[i].getCurrentRotationalPose()));
             SmartDashboard.putNumber(i+"th module current rotation TICK",modules[i].getCurrentRotationalPose());
+            SmartDashboard.putNumber(i+"th module current draw", modules[i].getDriveCurrent());
             
         }
      

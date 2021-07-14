@@ -83,6 +83,10 @@ public class SwerveModule {
         this.y = 0;
     }
 
+    public double getDriveCurrent() {
+        return drive.getCurrent();
+    }
+
     public double[] getModulePosition() {
         return new double[]{MathUtility.toFeet(MathUtility.applyGearRatio(x)), MathUtility.toFeet(MathUtility.applyGearRatio(y))};
     }
