@@ -91,6 +91,15 @@ public class Drivetrain extends SubsystemBase {
   public void resetPose() {
     swerve.resetPose();
   }
+
+  public void toggleSpeed() {
+    if(Constants.PERCENT_SPEED == 0.26) {
+      Constants.PERCENT_SPEED = 0.6;
+    }
+    else {
+      Constants.PERCENT_SPEED = 0.26;
+    }
+  }
   
   @Override
   public void periodic() {
