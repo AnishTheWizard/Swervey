@@ -27,11 +27,14 @@ public class MathUtility {
         return turns / Constants.GEAR_RATIO;
     }
 
-    public static int toTicks(double radians) {
-        if(radians < 0) {
-            radians += Math.PI * 2; //atan returns -pi -> pi, if its negative, hard to map to encoder 0 -> 4096
+    public static int toTicks(double rad) {
+        if(rad > 2 * Math.PI) {
+            rad = rad % (2 * Math.PI);
         }
-        return (int)((radians * Constants.TICKS_PER_ROTATION)/(Math.PI*2));
+        else if(rad < 0) {
+            rad = (2 * Math.PI) + (rad % (2 * Math.PI));
+        }
+        return (int)((rad * Constants.TICKS_PER_ROTATION)/(Math.PI*2));
     }
 
     public static double toRadians(int ticks) {

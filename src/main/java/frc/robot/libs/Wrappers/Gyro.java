@@ -31,12 +31,6 @@ public class Gyro {
         gyro.getYawPitchRoll(ypr);
 
         double rad = Math.toRadians(ypr[0]);
-        if(rad > 2 * Math.PI) {
-            rad = rad % (2 * Math.PI);
-        }
-        else if(rad < 0) {
-            rad = (2 * Math.PI) - (rad % (2 * Math.PI));
-        }
         return rad;
     }
 
