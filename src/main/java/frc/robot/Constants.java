@@ -26,7 +26,7 @@ public final class Constants {
 
     public static final int TICKS_PER_ROTATION = 4096;
 
-    public static final int OVERFLOW_THRESHOLD = 3500;
+    public static final int OVERFLOW_THRESHOLD = 2048;
  
     public static final int WHEEL_DIAMETER = 4;
 
