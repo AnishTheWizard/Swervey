@@ -57,7 +57,7 @@ public class GenericMotor {
         if(speed != lastMotorSpeed) {
             switch(motorType) {
                 case FALCON:
-                    falcon.set(ControlMode.PercentOutput, speed); // TODO don't have to constantly spew numbers at the motor
+                    falcon.set(ControlMode.PercentOutput, speed);
                     break;
                 case VICTOR:
                     victor.set(ControlMode.PercentOutput, speed);

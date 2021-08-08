@@ -9,7 +9,6 @@ package frc.robot.libs.Swerve;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.robot.libs.Utils.MathUtility;
 import frc.robot.libs.Wrappers.*;
 
@@ -47,8 +46,7 @@ public class SwerveModule {
         double xChange = drive.getSensorOffset();
         double yChange = drive.getSensorOffset();
 
-        int targetTicks = MathUtility.toTicks(theta);
-        double angleErr = MathUtility.toRadians(getError(targetTicks));
+        double angleErr = (theta - MathUtility.toRadians(steercoder.getContinousPosition())) % (2 * Math.PI); // simpler error calculation
 
         SmartDashboard.putNumber("err", angleErr);
 
@@ -58,7 +56,7 @@ public class SwerveModule {
             switcher = !switcher;
         }
 
-        if(switcher) {
+        if(switcher) {  //TODO REPAIR USAGE OF STEERCODER
             xChange *= Math.cos(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2 - gyroAngle);
             yChange *= Math.sin(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2 - gyroAngle);
         }
@@ -89,22 +87,6 @@ public class SwerveModule {
 
     public double[] getModulePosition() {
         return new double[]{MathUtility.toFeet(MathUtility.applyGearRatio(x)), MathUtility.toFeet(MathUtility.applyGearRatio(y))};
-    }
-
-    public int getError(int target) {
-        int currentPose = steercoder.getAbsolutePosition();
-        int err = target - currentPose;
-
-        if(Math.abs(err) > Constants.OVERFLOW_THRESHOLD) {//fix encoder jumps from 4095 -> 0, and 0 -> 4095
-            if(err < 0) {
-                target+=Constants.TICKS_PER_ROTATION;
-            }
-            else if(err > 0){
-                currentPose += Constants.TICKS_PER_ROTATION;
-            }
-            err = target - currentPose;
-        }
-        return err;
     }
 
     public int getCurrentRotationalPose() {

@@ -51,7 +51,6 @@ public class BotionofTheBocean {
                 export.flush();
                 export.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             
@@ -84,7 +83,6 @@ public class BotionofTheBocean {
                 }
 
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             return new double[]{0.0, 0.0};

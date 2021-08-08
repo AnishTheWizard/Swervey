@@ -28,7 +28,7 @@ public class MathUtility {
     }
 
     public static int toTicks(double rad) {
-        if(rad > 2 * Math.PI) {
+        if(rad > 2 * Math.PI) { // limit the range of radians to 0 -> 2pi
             rad = rad % (2 * Math.PI);
         }
         else if(rad < 0) {

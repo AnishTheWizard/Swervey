@@ -24,14 +24,13 @@ import frc.robot.libs.Wrappers.Gyro;
  */
 
 /**
- * TODO PROBLEMS
  * How would rotation with right joy work - uwu
  * How would field centric mode work - uwu
  * How to fix the atan2's jump in - uwu
  * How to fix the encoder jump from 4095 -> 0 - uwu
  * How to implement module offsets - uwu
  * How should the wheel move when theta > 90 - uwu
- * Fix generic encoder with multithread - unpog
+ * Fix generic encoder with multithread - uwu
  * Write drive train implementation of Swerve class - uwu
  * 
  * Organizing PROBLEM
@@ -56,7 +55,7 @@ public class Swerve {
 
     private final double[] ROTATION_ANGLES;   
     private final double ROTATION_ANGLE;
-    private final double DIAG_DIST;
+    //private final double DIAG_DIST;
 
     public Swerve(GenericMotor[] drives, GenericMotor[] steers, GenericEncoder[] encoders) {
 
@@ -75,7 +74,7 @@ public class Swerve {
         ROTATION_ANGLE = Math.atan2((Constants.WIDTH/2), (Constants.LENGTH/2));
         ROTATION_ANGLES = new double[]{ROTATION_ANGLE, Math.PI/2 + ROTATION_ANGLE + Math.PI, ROTATION_ANGLE + Math.PI, ROTATION_ANGLE+Math.PI/2};
 
-        DIAG_DIST = Math.sqrt(Math.pow(Constants.WIDTH, 2) + Math.pow(Constants.LENGTH, 2));
+        //DIAG_DIST = Math.sqrt(Math.pow(Constants.WIDTH, 2) + Math.pow(Constants.LENGTH, 2));
 
         speeds = new double[]{0.0, 0.0, 0.0, 0.0};
         thetas = new double[]{0.0, 0.0, 0.0, 0.0};
@@ -115,7 +114,7 @@ public class Swerve {
             double mag = Math.hypot(targetVectorX, targetVectorY);
             double theta = Math.atan2(targetVectorY, targetVectorX);
 
-            theta -= gyro.getRobotRotation(); // field centric TODO
+            theta -= gyro.getRobotRotation();
 
             speeds[i] = mag * Constants.PERCENT_SPEED;
             if(!(x == 0 && y == 0 && rotateMag == 0)) {

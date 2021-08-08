@@ -70,7 +70,7 @@ public class Drivetrain extends SubsystemBase {
       // drives[i].setConfig(driveConfig);
       // steers[i].setConfig(steerConfig);
 
-      encoders[i] = new GenericEncoder(new AnalogInput(RobotMap.ENCODERS_STEER[i]), i); //if this needs config, create a hashmap of args to pass
+      encoders[i] = new GenericEncoder(new AnalogInput(RobotMap.ENCODERS_STEER[i]), Constants.MODULE_OFFSETS[i]); //if this needs config, create a hashmap of args to pass
     }
 
     swerve = new Swerve(drives, steers, encoders);
