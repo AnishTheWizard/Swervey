@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPXConfiguration;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -64,13 +65,17 @@ public class Drivetrain extends SubsystemBase {
     // driveConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
 
     for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
-      drives[i] = new GenericMotor(new CANSparkMax(RobotMap.MODULES_DRIVE[i], MotorType.kBrushless));
-      steers[i] = new GenericMotor(new CANSparkMax(RobotMap.MODULES_STEER[i], MotorType.kBrushless));
+      CANSparkMax drive = new CANSparkMax(RobotMap.MODULES_DRIVE[i], MotorType.kBrushless);
+      CANSparkMax steer = new CANSparkMax(RobotMap.MODULES_STEER[i], MotorType.kBrushless);
+      drive.setIdleMode(IdleMode.kBrake);
+      steer.setIdleMode(IdleMode.kCoast);
+      drives[i] = new GenericMotor(drive);
+      steers[i] = new GenericMotor(steer);
 
       // drives[i].setConfig(driveConfig);
       // steers[i].setConfig(steerConfig);
 
-      encoders[i] = new GenericEncoder(new AnalogInput(RobotMap.ENCODERS_STEER[i]), Constants.MODULE_OFFSETS[i]); //if this needs config, create a hashmap of args to pass
+      encoders[i] = new GenericEncoder(new AnalogInput(RobotMap.ENCODERS_STEER[i]), Constants.MODULE_OFFSETS[i], Constants.TICKS_PER_ROTATION, Constants.OVERFLOW_THRESHOLD); //if this needs config, create a hashmap of args to pass
     }
 
     swerve = new Swerve(drives, steers, encoders);

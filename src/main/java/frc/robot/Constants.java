@@ -16,12 +16,15 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int[] MODULE_OFFSETS = {0, 0, 0, 0};//mod 1 is 2120 {2120, 1052, 2787, 968}
+    public static final int[] MODULE_OFFSETS = {2092,1061,2889,960};//mod 1 is 2120 {2120, 1052, 2787, 968}
     
     public static final double WIDTH = 23.5;
     public static final double LENGTH = 21.5;
 
-    public static final double[] dtGains = {0.226, 0.0, 0.0};
+    public static final double[] DRIVE_GAINS = {0, 0, 0};
+    public static final double[] STEER_GAINS = {0.226, 0.0, 0.0};
+    public static final double[] ROTATIONAL_GAINS = {0, 0, 0};
+
     public static final int NUMBER_OF_MODULES = 4;
 
     public static final int TICKS_PER_ROTATION = 4096;
@@ -31,6 +34,7 @@ public final class Constants {
     public static final int WHEEL_DIAMETER = 4;
 
     public static final double GEAR_RATIO = 8.31/1;
+    public static final double DRIVE_TICKS_PER_ROTATION = TICKS_PER_ROTATION * GEAR_RATIO;
 
     public static final double CONTROLLER_DEADBAND = 0.1;
 

@@ -31,6 +31,9 @@ public class BotionofTheBocean {
                 isRecording = false;
                 export();
             }
+            else {
+                isRecording = true;
+            }
         }
 
         public static void recordPose(double x, double y, double theta) {
@@ -77,9 +80,6 @@ public class BotionofTheBocean {
                 reader = new BufferedReader(new FileReader("recording.csv"));
                 String line = reader.readLine();
                 while(line != null) {
-                    String[] data = line.split(", ");
-                    
-
                 }
 
             } catch (IOException e) {

@@ -47,7 +47,9 @@ public class Swerve {
 
     private Gyro gyro;
 
+    private PIDController driveController;
     private PIDController steerController;
+    private PIDController rotationalController;
 
 
     private double[] speeds;
@@ -59,14 +61,18 @@ public class Swerve {
 
     public Swerve(GenericMotor[] drives, GenericMotor[] steers, GenericEncoder[] encoders) {
 
-        steerController = new PIDController(Constants.dtGains[0], Constants.dtGains[1], Constants.dtGains[2]);
+        driveController = new PIDController(Constants.DRIVE_GAINS[0], Constants.DRIVE_GAINS[1], Constants.DRIVE_GAINS[2]);
+        steerController = new PIDController(Constants.STEER_GAINS[0], Constants.STEER_GAINS[1], Constants.STEER_GAINS[2]);
+        rotationalController = new PIDController(Constants.ROTATIONAL_GAINS[0], Constants.ROTATIONAL_GAINS[1], Constants.ROTATIONAL_GAINS[2]);
+
+
 
         for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
             GenericMotor drive = drives[i];
             GenericMotor steer = steers[i];
             GenericEncoder steercoder = encoders[i];
 
-            modules[i] = new SwerveModule(drive, steer, steercoder, steerController);
+            modules[i] = new SwerveModule(drive, steer, steercoder, steerController, i);
         }
 
         gyro = new Gyro(new TalonSRX(RobotMap.GYRO));
@@ -99,14 +105,8 @@ public class Swerve {
         for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
             double rotationX, rotationY;
 
-            rotationX = rotateMag * Math.cos(ROTATION_ANGLES[i] + gyro.getRobotRotation());
-            rotationY = rotateMag * Math.sin(ROTATION_ANGLES[i] + gyro.getRobotRotation());
-
-            // double earlyTheta = Math.atan2(y, x);
-            // earlyTheta -= gyro.getRobotRotation();
-            // double hypot = Math.hypot(x, y);
-            // x = hypot * Math.cos(earlyTheta);
-            // y = hypot * Math.sin(earlyTheta);
+            rotationX = rotateMag * Math.cos(ROTATION_ANGLES[i] - gyro.getRobotRotation());
+            rotationY = rotateMag * Math.sin(ROTATION_ANGLES[i] - gyro.getRobotRotation());
 
             double targetVectorX = x + rotationX;
             double targetVectorY = y + rotationY;
@@ -114,7 +114,7 @@ public class Swerve {
             double mag = Math.hypot(targetVectorX, targetVectorY);
             double theta = Math.atan2(targetVectorY, targetVectorX);
 
-            theta -= gyro.getRobotRotation();
+            theta += gyro.getRobotRotation();
 
             speeds[i] = mag * Constants.PERCENT_SPEED;
             if(!(x == 0 && y == 0 && rotateMag == 0)) {
@@ -124,7 +124,7 @@ public class Swerve {
             SmartDashboard.putNumber(i+"th theta", thetas[i]);
             SmartDashboard.putNumber(i+"th module rotationX", rotationX);
             SmartDashboard.putNumber(i+"th module targetVecX", targetVectorX);
-            SmartDashboard.putNumber(i+"th module current rotation RAD", MathUtility.toRadians(modules[i].getCurrentRotationalPose()));
+            SmartDashboard.putNumber(i+"th module current rotation RAD", modules[i].getContinousRotationalPose());
             SmartDashboard.putNumber(i+"th module current rotation TICK",modules[i].getCurrentRotationalPose());
             SmartDashboard.putNumber(i+"th module current draw", modules[i].getDriveCurrent());
             
@@ -138,8 +138,6 @@ public class Swerve {
         for(int i = 0; i < modules.length; i++) {
             modules[i].set(speeds[i], thetas[i], transferAngle);
         }
-
-        
     }
 
     public double[] getPose() {
@@ -153,18 +151,14 @@ public class Swerve {
         return new double[]{xSum/Constants.NUMBER_OF_MODULES, ySum/Constants.NUMBER_OF_MODULES, gyro.getRobotRotation()};
     }
 
-    // public void toPose(double x, double y, double theta) {
-    //     double[][] destinations = parseCoords(x, y, theta);
-    // }
-
-    // public double[][] parseCoords(double x, double y, double theta) {
-    //     double[][] destinations = new double[Constants.NUMBER_OF_MODULES][2];
-    //     for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
-    //         double mod_theta = ROTATION_ANGLE + theta + (); // derive math for each consecutive module
-    //         destinations[i] = {DIAG_DIST * Math.cos(mod_theta) + x, DIAG_DIST * Math.sin(mod_theta) + y};
-    //     }
-    //     return destinations;
-    // }
+    public void toPose(double x, double y, double theta) {
+        //double[][] destinations = parseCoords(x, y, theta);
+        double[] currentPose = getPose();
+        double xChange = x - currentPose[0];
+        double yChange = y - currentPose[1];
+        double rotationalChange = theta - currentPose[3];
+        control(driveController.calculate(xChange), driveController.calculate(yChange), rotationalController.calculate(rotationalChange));
+    }
     
     public double getRotation() {
         return gyro.getRobotRotation(); //current bobot rotation

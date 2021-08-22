@@ -15,7 +15,7 @@ import frc.robot.Constants;
 /**
  * Add your docs here.
  */
-public class GenericEncoder_DEPRECATED {
+public class DEPRECATED_ENCODER {
     private AnalogInput analogEncoder;
     private CANCoder canCoder;
     private final int moduleNum;
@@ -27,13 +27,13 @@ public class GenericEncoder_DEPRECATED {
 
     private EncoderType encoderType;
 
-    public GenericEncoder_DEPRECATED(AnalogInput analogEncoder, int moduleNum) {
+    public DEPRECATED_ENCODER(AnalogInput analogEncoder, int moduleNum) {
         this.analogEncoder = analogEncoder;
         encoderType = EncoderType.ANALOG;
         this.moduleNum = moduleNum;
     }
 
-    public GenericEncoder_DEPRECATED(CANCoder canCoder, int moduleNum) {
+    public DEPRECATED_ENCODER(CANCoder canCoder, int moduleNum) {
         this.canCoder = canCoder; //default [0, 360)
         encoderType = EncoderType.CAN;
         this.moduleNum = moduleNum;

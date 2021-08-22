@@ -25,12 +25,13 @@ public class SwerveModule {
     private GenericMotor steer;
     private GenericEncoder steercoder;
     private PIDController steerController;
+    private int moduleNum;
 
     private boolean switcher; //alterates between true or false depending on when you change it
 
     private double x, y;
 
-    public SwerveModule(GenericMotor drive, GenericMotor steer, GenericEncoder steercoder, PIDController controller) {
+    public SwerveModule(GenericMotor drive, GenericMotor steer, GenericEncoder steercoder, PIDController controller, int modNum) {
         this.drive = drive;
         this.steer = steer;
         this.steercoder = steercoder;
@@ -40,15 +41,17 @@ public class SwerveModule {
         this.y = 0.0;
 
         this.switcher = false;
+        this.moduleNum = modNum;
     }
 
     public void set(double translate, double theta, double gyroAngle) {
         double xChange = drive.getSensorOffset();
         double yChange = drive.getSensorOffset();
 
-        double angleErr = (theta - MathUtility.toRadians(steercoder.getContinousPosition())) % (2 * Math.PI); // simpler error calculation
+        double angleErr = (theta - steercoder.getContinousPosition()) % (2 * Math.PI); // simpler error calculation
 
-        SmartDashboard.putNumber("err", angleErr);
+        
+        SmartDashboard.putNumber("err for: " + moduleNum, angleErr);
 
         if(angleErr > Math.PI/2) {
             angleErr -= Math.PI;
@@ -56,14 +59,14 @@ public class SwerveModule {
             switcher = !switcher;
         }
 
-        if(switcher) {  //TODO REPAIR USAGE OF STEERCODER
-            xChange *= Math.cos(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2 - gyroAngle);
-            yChange *= Math.sin(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2 - gyroAngle);
-        }
-        else {
-            xChange *= Math.cos(MathUtility.toRadians(steercoder.getAbsolutePosition()) - gyroAngle);
-            yChange *= Math.sin(MathUtility.toRadians(steercoder.getAbsolutePosition()) - gyroAngle);
-        }
+        // if(switcher) {  //TODO REPAIR USAGE OF STEERCODER
+        //     xChange *= Math.cos(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2 - gyroAngle);
+        //     yChange *= Math.sin(MathUtility.toRadians(steercoder.getAbsolutePosition()) + Math.PI/2 - gyroAngle);
+        // }
+        // else {
+        //     xChange *= Math.cos(MathUtility.toRadians(steercoder.getAbsolutePosition()) - gyroAngle);
+        //     yChange *= Math.sin(MathUtility.toRadians(steercoder.getAbsolutePosition()) - gyroAngle);
+        // }
 
         this.x += xChange;
         this.y += yChange;
@@ -90,6 +93,10 @@ public class SwerveModule {
     }
 
     public int getCurrentRotationalPose() {
-        return steercoder.getAbsolutePosition();
+        return steercoder.getCPTicks();
+    }
+
+    public double getContinousRotationalPose() {
+        return steercoder.getContinousPosition();
     }
 }

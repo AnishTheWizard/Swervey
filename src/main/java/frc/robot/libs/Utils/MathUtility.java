@@ -18,13 +18,12 @@ public class MathUtility {
         return ds;
     }
 
-    public static double toFeet(double x) { // from ticks
-        return x * 12 / Constants.TICKS_PER_ROTATION;
+    public static double toFeet(double percent) { // from percent of wheel used to feet
+        return percent * (2 * Constants.WHEEL_DIAMETER * Math.PI);
     }
 
     public static double applyGearRatio(double ticks) {
-        double turns = ticks/Constants.TICKS_PER_ROTATION;
-        return turns / Constants.GEAR_RATIO;
+        return ticks/Constants.DRIVE_TICKS_PER_ROTATION;
     }
 
     public static int toTicks(double rad) {
