@@ -48,7 +48,7 @@ public class SwerveModule {
         double xChange = drive.getSensorOffset();
         double yChange = drive.getSensorOffset();
 
-        double angleErr = (theta - steercoder.getContinousPosition()) % (2 * Math.PI); // simpler error calculation
+        double angleErr = theta - (steercoder.getContinousPosition() % (2 * Math.PI)); // simpler error calculation
 
         
         SmartDashboard.putNumber("err for: " + moduleNum, angleErr);

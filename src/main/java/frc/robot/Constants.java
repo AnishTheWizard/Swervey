@@ -22,7 +22,7 @@ public final class Constants {
     public static final double LENGTH = 21.5;
 
     public static final double[] DRIVE_GAINS = {0, 0, 0};
-    public static final double[] STEER_GAINS = {0.226, 0.0, 0.0};
+    public static final double[] STEER_GAINS = {0.117, 0.0, 0.0}; //0.226
     public static final double[] ROTATIONAL_GAINS = {0, 0, 0};
 
     public static final int NUMBER_OF_MODULES = 4;

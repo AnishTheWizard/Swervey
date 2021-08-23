@@ -67,7 +67,7 @@ public class Drivetrain extends SubsystemBase {
     for(int i = 0; i < Constants.NUMBER_OF_MODULES; i++) {
       CANSparkMax drive = new CANSparkMax(RobotMap.MODULES_DRIVE[i], MotorType.kBrushless);
       CANSparkMax steer = new CANSparkMax(RobotMap.MODULES_STEER[i], MotorType.kBrushless);
-      drive.setIdleMode(IdleMode.kBrake);
+      drive.setIdleMode(IdleMode.kCoast);
       steer.setIdleMode(IdleMode.kCoast);
       drives[i] = new GenericMotor(drive);
       steers[i] = new GenericMotor(steer);
@@ -98,12 +98,17 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void toggleSpeed() {
-    if(Constants.PERCENT_SPEED == 0.26) {
-      Constants.PERCENT_SPEED = 0.6;
-    }
-    else {
-      Constants.PERCENT_SPEED = 0.26;
-    }
+    // if(Constants.PERCENT_SPEED == 0.26) {
+    //   Constants.PERCENT_SPEED = 0.6;
+    // }
+    // else {
+    //   Constants.PERCENT_SPEED = 0.26;
+    // }
+    Constants.PERCENT_SPEED = 0.6;
+  }
+
+  public void slowSpeed(){
+    Constants.PERCENT_SPEED = 0.26;
   }
   
   @Override

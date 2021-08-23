@@ -61,7 +61,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     driver.getSELECTButton().whenPressed(() -> dt.zeroGyro());
-    driver.getYButton().whenPressed(() -> dt.toggleSpeed());
+    driver.getRBButton().whileHeld(() -> dt.toggleSpeed());
+    driver.getRBButton().whenReleased(() -> dt.slowSpeed());
     //driver.getSTARTButton().whenPressed(new InstantCommand(dt :: resetPose, dt));
    // driver.getBButton().whenPressed(new InstantCommand(dt :: toggleRecording, dt));
     //driver.getYButton().whenPressed(new InstantCommand(dt :: toggleExecutor, dt));
